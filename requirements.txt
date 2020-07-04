@@ -1,0 +1,14 @@
+# Wheel needs to be installed first so that mysqlclient installs correctly
+wheel
+
+flask
+python-dotenv
+mysqlclient
+gunicorn
+flask-sqlalchemy
+murmurhash3
+simplejson
+
+# Development packages for VS Code
+black
+pylint

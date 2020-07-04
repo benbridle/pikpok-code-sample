@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo supervisorctl stop flask_test && sudo supervisorctl start flask_test

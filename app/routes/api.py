@@ -1,20 +1,23 @@
-from app import app
-from flask import jsonify, request, Blueprint
-from app.models import *
-from app import db
-from app import exceptions
 import sqlalchemy
+import mmh3
+from datetime import datetime, timedelta
+from flask import jsonify, request, Blueprint
+from app import db
+from app.models import *
+from app import exceptions
 
 
 api = Blueprint("api", __name__)
 
 
 def assert_request_body():
+    """Ensure the request has body data."""
     if request.json is None:
         raise exceptions.MissingBodyError()
 
 
 def get_body_field(field_name):
+    """Ensure the request has a specific body field, and return it."""
     assert_request_body()
     field = request.json.get(field_name)
     if field is None:
@@ -23,11 +26,13 @@ def get_body_field(field_name):
 
 
 def get_body_fields(*field_names):
+    """Ensure the request has all specified body fields, and return them."""
     assert_request_body()
     return {name: get_body_field(name) for name in field_names}
 
 
-def get_or_create(model, **kwargs):
+def get_or_create_record(model, **kwargs):
+    """Fetch a database record, creating it first if it doesn't exist."""
     instance = db.session.query(model).filter_by(**kwargs).first()
     if instance:
         return instance
@@ -38,89 +43,158 @@ def get_or_create(model, **kwargs):
         return instance
 
 
+def get_current_account():
+    """Returns the account associated with the current request."""
+    authorization = request.headers.get("Authorization")
+    if authorization is None:
+        raise exceptions.MissingHeaderError("Authorization")
+    if not authorization.startswith("Bearer "):
+        raise exceptions.MalformedHeaderError("Authorization header content must start with 'Bearer '.")
+    token_string = authorization[len("Bearer ") :]
+    # Check if the access token exists and is not expired
+    try:
+        token = AccessToken.query.filter_by(token=token_string).one()
+    except sqlalchemy.orm.exc.NoResultFound:
+        return None
+    if token.is_expired():
+        return None
+    return token.account
+
+
+def restrict_access(authorized_account_id=None, error_message=None):
+    """Restrict access to only developers and the specified account."""
+    try:
+        current_account = get_current_account()
+    except exceptions.MissingHeaderError:
+        raise exceptions.NoAuthorizationSuppliedError
+    if current_account is None:
+        raise exceptions.UnauthorizedAccessError(error_message)
+    if current_account.is_developer:
+        return
+    if authorized_account_id is None:
+        raise exceptions.UnauthorizedAccessError(error_message)
+    if current_account.id == authorized_account_id:
+        return
+    raise exceptions.UnauthorizedAccessError
+
+
 @api.route("/")
 def index():
     return jsonify("Doctrine API")
 
 
-@api.route("/account/", methods=["GET"])
+@api.route("/generators/profile_image")
+def generate_random_profile_image():
+    pass
+
+
+@api.route("/login")
+def login():
+    # Find the account matching the given email address
+    password = get_body_field("password")
+    email_address = get_body_field("email_address")
+    email_hash = mmh3.hash128(email_address)
+    email_hash = email_hash.to_bytes(16, byteorder="big")
+    try:
+        email_address = EmailAddress.query.filter_by(hash=email_hash).one()
+        account = Account.query.filter_by(email_address=email_address).one()
+    except sqlalchemy.orm.exc.NoResultFound:
+        raise exceptions.UnauthorizedAccessError
+    # Test that the password matches the hashed account password
+    if not bcrypt.checkpw(password.encode("utf-8"), account.password_hash):
+        raise exceptions.UnauthorizedAccessError
+    # Generate and return an access token
+    token = AccessToken(account=account, duration=timedelta(hours=24))
+    db.session.add(token)
+    db.session.commit()
+    return jsonify({"token": str(token)})
+
+
+@api.route("/accounts/")
 def get_accounts_metadata():
+    restrict_access()
     accounts_info = {
         "count": db.session.query(Account).count(),
-        "accounts": [get_account(account.id).get_json() for account in Account.query.all()],
+        "accounts": [account for account in Account.query.all()],
     }
     return jsonify(accounts_info)
 
 
-@api.route("/account/", methods=["POST"])
+@api.route("/accounts/", methods=["POST"])
 def create_account():
+    password = get_body_field("password")
     email_address = get_body_field("email_address")
-    email_address = get_or_create(EmailAddress, email_address=email_address)
-    account = Account(email_address=email_address)
+    email_address = get_or_create_record(EmailAddress, email_address=email_address)
+    account = Account(email_address=email_address, password=password)
     db.session.add(account)
     try:
         db.session.commit()
     except sqlalchemy.exc.IntegrityError:
         raise exceptions.ResourceAlreadyExistsError("An account with this email address already exists.")
-    return get_account(account.id)
+    return jsonify(account)
 
 
-@api.route("/account/<int:account_id>", methods=["GET"])
+@api.route("/accounts/<int:account_id>")
 def get_account(account_id):
+    restrict_access(account_id)
     account = Account.query.get(account_id)
     if account is None:
         raise exceptions.ResourceNotFoundError("An account with this ID was not found.")
-    account_info = {
-        "id": account.id,
-        "email_address": str(account.email_address),
-    }
-    return jsonify(account_info)
+    return jsonify(account)
 
 
-@api.route("/profile/", methods=["GET"])
+@api.route("/profiles/")
 def get_profiles_metadata():
+    restrict_access()
     profiles_info = {
         "count": db.session.query(Profile).count(),
-        "profiles": [get_profile(profile.id).get_json() for profile in Profile.query.all()],
+        "profiles": [profile.get_json() for profile in Profile.query.all()],
     }
     return jsonify(profiles_info)
 
 
-@api.route("/profile/", methods=["POST"])
+@api.route("/profiles/", methods=["POST"])
 def create_profile():
-    name = get_body_field("name")
-    picture = get_body_field("picture")
     account_id = get_body_field("account_id")
-    try:
-        picture = int(picture)
-    except ValueError:
-        raise exceptions.MalformedFieldError("The 'picture' field must be an integer.")
-    picture_bytes = picture.to_bytes(16, byteorder="big")
+    restrict_access(account_id, "Only the owner of an account can create a profile for that account.")
+    name = get_body_field("name")
+    # picture = get_body_field("picture")
+    # try:
+    #     picture = int(picture)  # should be int anyway
+    # except ValueError:
+    #     raise exceptions.MalformedFieldError("The 'picture' field must be an integer.")
+    # picture_bytes = picture.to_bytes(16, byteorder="big")
     account = Account.query.get(account_id)
     if account is None:
         raise exceptions.ResourceNotFoundError("An account with this ID was not found.")
-    profile = Profile(account=account, picture=picture_bytes, name=name)
+    profile = Profile(account=account, name=name)  # picture=picture_bytes
     db.session.add(profile)
     try:
         db.session.commit()
     except sqlalchemy.exc.IntegrityError as e:
         if e.orig.args[0] == 1062 and ".name" in e.orig.args[1]:
-            raise exceptions.ResourceAlreadyExistsError("A profile with the chosen name already exists.")
-    return get_profile(profile.id)
+            raise exceptions.ResourceAlreadyExistsError("Another profile with the chosen name already exists.")
+    return jsonify(profile)
 
 
-@api.route("/profile/<int:profile_id>", methods=["GET"])
+@api.route("/profiles/<int:profile_id>")
 def get_profile(profile_id):
+    restrict_access()
     profile = Profile.query.get(profile_id)
     if profile is None:
         raise exceptions.ResourceNotFoundError("A profile with this ID was not found.")
-    profile_info = {
-        "id": profile.id,
-        "name": profile.name,
-        "picture": int.from_bytes(profile.picture, byteorder="big"),
-        "account": get_account(profile.account_id).get_json(),
-    }
-    return jsonify(profile_info)
+    restrict_access(profile.account.id)
+    return jsonify(profile)
+
+
+@api.route("/actions/regenerate-db")
+def regenerate_database():
+    restrict_access()
+    """Helper endpoint for dropping and regenerating the database."""
+    query = "DROP DATABASE IF EXISTS doctrine_game; CREATE DATABASE doctrine_game; USE doctrine_game;"
+    db.session.execute(query)
+    db.create_all()
+    return "", 200
 
 
 @api.errorhandler(exceptions.BaseError)

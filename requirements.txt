@@ -7,7 +7,9 @@ mysqlclient
 gunicorn
 flask-sqlalchemy
 murmurhash3
+bcrypt
 simplejson
+pillow
 
 # Development packages for VS Code
 black

@@ -46,7 +46,14 @@ class MissingFieldError(BadRequestError):
 class MalformedFieldError(BadRequestError):
     message = "The value of a field in the request body is malformed."
 
-    pass
+
+class MissingHeaderError(BadRequestError):
+    def __init__(self, header_name):
+        self.message = f"The '{header_name}' header was missing from the request."
+
+
+class MalformedHeaderError(BadRequestError):
+    message = "The value of a header is malformed."
 
 
 # ----------------------------------------------------------------
@@ -62,6 +69,10 @@ class ResourceNotFoundError(UserError):
     status_code = 404
     message = "The specified resource was not found."
 
+
+class NoAuthorizationSuppliedError(UserError):
+    status_code = 401
+    message = "No credentials supplied. Provide an access token via the Authorization header."
 
 class UnauthorizedAccessError(UserError):
     status_code = 403

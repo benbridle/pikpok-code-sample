@@ -86,6 +86,7 @@ def index():
 
 @api.route("/generators/profile_image")
 def generate_random_profile_image():
+    """Get a randomly generated profile image as a Base64-encoded string."""
     return jsonify({"image": generate_profile_image().to_base64_string()})
 
 

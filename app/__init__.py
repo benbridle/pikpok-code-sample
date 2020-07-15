@@ -10,8 +10,8 @@ db = SQLAlchemy(app)
 # access, so they're kept at the bottom of the module to
 # prevent cyclic imports.
 from app import models
-
-db.create_all()
 from app.routes.api import api
 
+# Generate database tables
+db.create_all()
 app.register_blueprint(api, url_prefix="/api")

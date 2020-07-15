@@ -12,6 +12,7 @@ midground_colours = [9, 15, 13, 4, 6, 0]
 foreground_colours = [1, 2, 3, 5, 8, 11, 12]
 
 def generate_profile_image():
+    """Generate a random profile image."""
     profile_image = ProfileImage()
     profile_image.fill(random.choice(background_colours))
     border_path = random.choice(border_paths)

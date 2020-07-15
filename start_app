@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Activate virtualenv
+. venv/bin/activate
+# Run gunicorn, listening on localhost:8004 with 4 worker threads
+gunicorn -b localhost:8004 -w 4 main:app

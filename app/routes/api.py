@@ -5,6 +5,7 @@ from flask import jsonify, request, Blueprint
 from app import db
 from app.models import *
 from app import exceptions
+from app.modules.profile_image import generate_profile_image
 
 
 api = Blueprint("api", __name__)
@@ -85,7 +86,7 @@ def index():
 
 @api.route("/generators/profile_image")
 def generate_random_profile_image():
-    pass
+    return jsonify({"image": generate_profile_image().to_base64_string()})
 
 
 @api.route("/login")

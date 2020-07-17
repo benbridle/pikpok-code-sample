@@ -126,12 +126,14 @@ class Profile(db.Model):
     entity = relationship("Entity")
     creation_time = Column(DateTime, nullable=False, default=datetime.utcnow)
 
-    def _asjson(self):
+    def _asdict(self):
         profile_info = {
             "id": self.id,
             "name": self.name,
             "picture": int.from_bytes(self.picture, byteorder="big"),
-            "account": json(self.account),
+            "account": self.account._asdict(),
+            "entity": self.entity._asdict(),
+            "creation_time": self.creation_time.replace(tzinfo=timezone.utc).isoformat(),
         }
         return profile_info
 
@@ -155,6 +157,12 @@ class Team(db.Model):
 
 class Entity(db.Model):
     """A 'legal person' who can own assets, either a profile or a team."""
+
+    def _asdict(self):
+        entity_info = {
+            "id": self.id,
+        }
+        return entity_info
 
     __tablename__ = "entity"
     id = Column(UnsignedInt, primary_key=True)

@@ -153,7 +153,7 @@ def get_profiles_metadata():
     restrict_access()
     profiles_info = {
         "count": db.session.query(Profile).count(),
-        "profiles": [profile.get_json() for profile in Profile.query.all()],
+        "profiles": [profile._asdict() for profile in Profile.query.all()],
     }
     return jsonify(profiles_info)
 

@@ -17,12 +17,15 @@ def assert_request_body():
         raise exceptions.MissingBodyError()
 
 
-def get_body_field(field_name):
+def get_body_field(field_name, field_type=None):
     """Ensure the request has a specific body field, and return it."""
     assert_request_body()
     field = request.json.get(field_name)
     if field is None:
         raise exceptions.MissingFieldError(field_name)
+    if field_type is not None:
+        if not isinstance(field, field_type):
+            raise exceptions.MalformedFieldError(f"The '{field_name}' field must be of type '{field_type.__name__}'.")
     return field
 
 

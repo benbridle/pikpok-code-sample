@@ -90,7 +90,7 @@ def generate_random_profile_image():
     return jsonify({"image": generate_profile_image().to_base64_string()})
 
 
-@api.route("/login")
+@api.route("/login", methods=["POST"])
 def login():
     # Find the account matching the given email address
     password = get_body_field("password")

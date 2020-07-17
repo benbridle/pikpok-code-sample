@@ -322,18 +322,6 @@ class AssetTransaction:
         return f"<AssetTransaction #{self.id}>"
 
 
-class AccountCreationEvent:
-    """Logs the time an account was created."""
-
-    id = Column(UnsignedInt, primary_key=True)
-    account_id = Column(UnsignedInt, ForeignKey("account.id"), nullable=False)
-    account = relationship("Account")
-    creation_time = Column(DateTime, nullable=False, default=datetime.now)
-
-    def __repr__(self):
-        return f"<AccountCreationEvent #{self.id}>"
-
-
 class AccountSignInEvent:
     """Logs the time an account was signed in to."""
 

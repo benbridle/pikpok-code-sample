@@ -1,0 +1,166 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+*,
+body {
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Karla', sans-serif;
+    /* font-family: 'Source Sans Pro', sans-serif; */
+}
+
+.vertical-center {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.main-title {
+    font-family: 'Work Sans', sans-serif;
+    text-align: center;
+    color: black;
+}
+
+h1.main-title {
+    font-size: 4em;
+}
+
+.small-title {
+    font-family: 'Work Sans', sans-serif;
+    text-align: center;
+    color: black;
+}
+
+h1.small-title {
+    font-size: 2.6em;
+}
+
+h2.small-title {
+    font-size: 1.6em;
+}
+
+.subtitle {
+    font-size: 1em;
+    font-family: 'Work Sans', sans-serif;
+    text-align: center;
+    letter-spacing: 5px;
+    color: black;
+    margin-top: -10px;
+    margin-bottom: 1em;
+}
+
+input {
+    display: block;
+    margin: 6px auto;
+    width: 100%;
+    font-family: 'IBM Plex Mono', monospace;
+    border: 2px solid #666;
+    border-radius: 4px;
+    padding: 4px 6px;
+    /* remove autofill yellow background*/
+    filter: none;
+    box-shadow: none;
+}
+
+input.error {
+    background-color: #ffc6c6;
+}
+
+p.error {
+    color: #ff3535;
+}
+
+button {
+    display: block;
+    font-family: 'Karla', sans-serif;
+    padding: 2px 6px;
+    color: white;
+    background-color: black;
+    border: 3px solid black;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+button:hover {
+    background-color: white;
+    color: black;
+    cursor: pointer;
+}
+
+button.center {
+    margin: 6px auto;
+}
+
+.card {
+    border: 3px solid black;
+    border-radius: 4px;
+    padding: 10px 20px;
+    text-align: center;
+    min-width: 260px;
+}
+
+.card>h2 {
+    color: black;
+    font-size: 1.6em;
+    text-align: center;
+    font-family: 'Work Sans', sans-serif;
+}
+
+.subtle {
+    color: #333;
+    text-decoration: none;
+}
+
+a.subtle {
+    font-size: 0.9em;
+}
+
+a.subtle:hover {
+    background-color: #333;
+    color: white;
+    text-decoration: none;
+}
+
+.plain {
+    text-decoration: none;
+}
+
+.spacer {
+    height: 20px;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.loader {
+    font-family: 'Karla', sans-serif;
+    margin: 9px auto;
+    padding: 2px 6px;
+    color: black;
+    font-size: 1em;
+}
+
+.gone {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    display: none;
+}
+
+div.dashboard-container {
+    max-width: 700px;
+    margin: 40px auto;
+}
+
+div.dashboard-header {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}

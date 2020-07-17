@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/doctrine.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Karla:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@600&display=swap" rel="stylesheet">
+    <script src="{{ url_for('static', filename='scripts/create_account_log_in.js') }}"></script>
+
+    <title>Create account on Doctrine</title>
+</head>
+
+<body>
+    <div class="vertical-center">
+        <div class="card">
+            <a class="plain" href="/">
+                <h1 class="small-title">DOCTRINE</h1>
+            </a>
+            <h2>CREATE ACCOUNT</h2>
+            <div class="spacer"></div>
+            <form id="create-account-form">
+                <p id="error-message" class="error hidden">Error message</p>
+                <input id="email" type="email" placeholder="Email address" maxlength="255" size="1" required autofocus>
+                <input id="password" type="password" placeholder="Password" size="1" required>
+                <input id="confirm-password" type="password" placeholder="Confirm password" size="1" required>
+                <button id="submit-button" class="center" type="submit">CREATE ACCOUNT</button>
+                <p id="loader" class="loader gone">LOADING...</p>
+                <div style="height:10px;"></div>
+                <a class="subtle" href="/login">[log in instead]</a>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        var form = document.getElementById("create-account-form");
+        form.addEventListener('submit', function(event) {
+            var email = document.getElementById("email");
+            var password = document.getElementById("password");
+            var confirm_password = document.getElementById("confirm-password");
+            if (password.value == confirm_password.value) {
+                create_account(email.value, password.value);
+            } else {
+                set_error_message("Passwords don't match");
+                password.classList.add("error");
+                confirm_password.classList.add("error");
+            }
+            event.preventDefault();
+        });
+    </script>
+
+    <script>
+        const password = document.getElementById("password");
+        const confirm_password = document.getElementById("confirm-password");
+        password.addEventListener('input', passwordUpdate);
+        confirm_password.addEventListener('input', passwordUpdate);
+
+        window.onhashchange = reset_error_state;
+
+        function passwordUpdate(event) {
+            reset_error_state();
+            if (event.target.value.length == 0) {
+                event.target.style.letterSpacing = "0px";
+            } else {
+                event.target.style.letterSpacing = "3px";
+            }
+        }
+    </script>
+
+
+
+
+</body>

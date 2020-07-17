@@ -160,25 +160,29 @@ def get_profiles_metadata():
 
 @api.route("/profiles/", methods=["POST"])
 def create_profile():
-    account_id = get_body_field("account_id")
+    account_id = get_body_field("account_id", field_type=int)
     restrict_access(account_id, "Only the owner of an account can create a profile for that account.")
+
     name = get_body_field("name")
-    # picture = get_body_field("picture")
-    # try:
-    #     picture = int(picture)  # should be int anyway
-    # except ValueError:
-    #     raise exceptions.MalformedFieldError("The 'picture' field must be an integer.")
-    # picture_bytes = picture.to_bytes(16, byteorder="big")
+    try:
+        picture = get_body_field("picture", field_type=int)
+    except exceptions.MissingFieldError:
+        picture = int(generate_profile_image())
+    picture_bytes = picture.to_bytes(128, byteorder="big")
+
     account = Account.query.get(account_id)
     if account is None:
-        raise exceptions.ResourceNotFoundError("An account with this ID was not found.")
-    profile = Profile(account=account, name=name)  # picture=picture_bytes
+        raise exceptions.ResourceNotFoundError("An account with the specified ID was not found.")
+    if not Profile.query.filter_by(name=name).count() == 0:
+        raise exceptions.ResourceAlreadyExistsError("Another profile with the chosen name already exists.")
+
+    # Create the profile
+    entity = Entity()
+    db.session.add(entity)
+    # db.session.flush()
+    profile = Profile(account=account, name=name, picture=picture_bytes, entity=entity)
     db.session.add(profile)
-    try:
-        db.session.commit()
-    except sqlalchemy.exc.IntegrityError as e:
-        if e.orig.args[0] == 1062 and ".name" in e.orig.args[1]:
-            raise exceptions.ResourceAlreadyExistsError("Another profile with the chosen name already exists.")
+    db.session.commit()
     return jsonify(profile), 201
 
 

@@ -133,7 +133,7 @@ def create_account():
         db.session.commit()
     except sqlalchemy.exc.IntegrityError:
         raise exceptions.ResourceAlreadyExistsError("An account with this email address already exists.")
-    return jsonify(account)
+    return jsonify(account), 201
 
 
 @api.route("/accounts/<int:account_id>")
@@ -176,7 +176,7 @@ def create_profile():
     except sqlalchemy.exc.IntegrityError as e:
         if e.orig.args[0] == 1062 and ".name" in e.orig.args[1]:
             raise exceptions.ResourceAlreadyExistsError("Another profile with the chosen name already exists.")
-    return jsonify(profile)
+    return jsonify(profile), 201
 
 
 @api.route("/profiles/<int:profile_id>")

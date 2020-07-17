@@ -104,10 +104,10 @@ def login():
         email_address = EmailAddress.query.filter_by(hash=email_hash).one()
         account = Account.query.filter_by(email_address=email_address).one()
     except sqlalchemy.orm.exc.NoResultFound:
-        raise exceptions.UnauthorizedAccessError
+        raise exceptions.InvalidCredentialsError
     # Test that the password matches the hashed account password
     if not bcrypt.checkpw(password.encode("utf-8"), account.password_hash):
-        raise exceptions.UnauthorizedAccessError
+        raise exceptions.InvalidCredentialsError
     # Generate and return an access token
     token = AccessToken(account=account, duration=timedelta(hours=24))
     db.session.add(token)

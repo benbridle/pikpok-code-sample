@@ -1,12 +1,9 @@
 import mmh3
-from sqlalchemy.orm import relation
 import bcrypt
 import string
 import secrets
-import simplejson as json
-from datetime import datetime, timedelta
+from datetime import datetime, timezone
 from sqlalchemy.dialects.mysql import INTEGER, BINARY, DECIMAL, FLOAT
-from sqlalchemy.sql.sqltypes import Boolean, DateTime
 from app import db
 
 Column = db.Column
@@ -46,6 +43,7 @@ class Account(db.Model):
         account_info = {
             "id": self.id,
             "email_address": str(self.email_address),
+            "creation_time": self.creation_time.replace(tzinfo=timezone.utc).isoformat(),
         }
         return account_info
 
@@ -54,6 +52,7 @@ class Account(db.Model):
     email_address = relationship("EmailAddress")
     password_hash = Column(BINARY(60), nullable=False)
     is_developer = Column(Boolean, nullable=False, default=False)
+    creation_time = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
         return f"<Account '{self.email_address}'>"
@@ -73,13 +72,13 @@ class AccessToken(db.Model):
                 return token
 
     def is_expired(self):
-        return datetime.now() > self.creation_time + self.duration
+        return datetime.utcnow() > self.creation_time + self.duration
 
     id = Column(UnsignedInt, primary_key=True)
     account_id = Column(UnsignedInt, ForeignKey("account.id"), nullable=False)
     account = relationship("Account")
     token = Column(String(64), nullable=False, unique=True, default=generate_access_token)
-    creation_time = Column(DateTime, nullable=False, default=datetime.now)
+    creation_time = Column(DateTime, nullable=False, default=datetime.utcnow)
     duration = Column(Interval, nullable=False)
 
     def __repr__(self):
@@ -125,6 +124,7 @@ class Profile(db.Model):
     account = relationship("Account")
     entity_id = Column(UnsignedInt, ForeignKey("entity.id"), nullable=False, unique=True)
     entity = relationship("Entity")
+    creation_time = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     def _asjson(self):
         profile_info = {
@@ -283,7 +283,7 @@ class TransactionEvent:
     __tablename__ = "transaction_event"
 
     id = Column(UnsignedInt, primary_key=True)
-    transaction_time = Column(DateTime, nullable=False, default=datetime.now)
+    transaction_time = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
         return f"<TransactionEvent #{self.id}>"
@@ -340,7 +340,7 @@ class AccountSignInEvent:
     id = Column(UnsignedInt, primary_key=True)
     account_id = Column(UnsignedInt, ForeignKey("account.id"), nullable=False)
     account = relationship("Account")
-    sign_in_time = Column(DateTime, nullable=False, default=datetime.now)
+    sign_in_time = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
         return f"<AccountSignInEvent #{self.id}>"

@@ -74,6 +74,17 @@ class NoAuthorizationSuppliedError(UserError):
     status_code = 401
     message = "No credentials supplied. Provide an access token via the Authorization header."
 
+
+class InvalidCredentialsError(UserError):
+    status_code = 403
+    message = "The provided credentials are invalid."
+
+
+class ExpiredTokenError(UserError):
+    status_code = 401
+    message = "The provided access token has expired and is no longer valid."
+
+
 class UnauthorizedAccessError(UserError):
     status_code = 403
     message = "You are not authorized to complete the current action."

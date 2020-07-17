@@ -79,7 +79,7 @@ def restrict_access(authorized_account_id=None, error_message=None):
         raise exceptions.UnauthorizedAccessError(error_message)
     if current_account.id == authorized_account_id:
         return
-    raise exceptions.UnauthorizedAccessError
+    raise exceptions.UnauthorizedAccessError(error_message)
 
 
 @api.route("/")

@@ -61,7 +61,7 @@ def get_current_account():
     except sqlalchemy.orm.exc.NoResultFound:
         return None
     if token.is_expired():
-        return None
+        raise exceptions.ExpiredTokenError
     return token.account
 
 

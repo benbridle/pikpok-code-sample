@@ -42,4 +42,4 @@ To begin serving the application, run:
 
 Open a web browser and navigate to `localhost:8004/` to use the application. 
 
-The Web API can be interacted with directly by visiting `localhost:8004/api/...`
+The Web API can be interacted with directly by visiting `localhost:8004/api/{endpoint}`. See `app/routes/api.py` for available endpoints.

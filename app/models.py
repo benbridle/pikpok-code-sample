@@ -51,6 +51,9 @@ class Account(db.Model):
             "id": self.id,
             "email_address": str(self.email_address),
             "creation_time": self.creation_time.replace(tzinfo=timezone.utc).isoformat(),
+            "profiles": [
+                profile._asdict(embed_account=False) for profile in Profile.query.filter_by(account=self).all()
+            ],
         }
         return account_info
 
@@ -126,15 +129,19 @@ class Profile(db.Model):
     entity = relationship("Entity")
     creation_time = Column(DateTime, nullable=False, default=datetime.utcnow)
 
-    def _asdict(self):
+    def _asdict(self, embed_account=True):
         profile_info = {
             "id": self.id,
             "name": self.name,
             "picture": int.from_bytes(self.picture, byteorder="big"),
-            "account": self.account._asdict(),
             "entity": self.entity._asdict(),
             "creation_time": self.creation_time.replace(tzinfo=timezone.utc).isoformat(),
         }
+        # Optional, to prevent circular references
+        if embed_account:
+            profile_info["account"] = self.account._asdict()
+            # Remove redundant profile information
+            del profile_info["account"]["profiles"]
         return profile_info
 
     def __repr__(self):

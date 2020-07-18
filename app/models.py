@@ -34,6 +34,13 @@ class Account(db.Model):
 
     __tablename__ = "account"
 
+    id = Column(UnsignedInt, primary_key=True)
+    email_address_id = Column(UnsignedInt, ForeignKey("email_address.id"), nullable=False, unique=True)
+    email_address = relationship("EmailAddress")
+    password_hash = Column(BINARY(60), nullable=False)
+    is_developer = Column(Boolean, nullable=False, default=False)
+    creation_time = Column(DateTime, nullable=False, default=datetime.utcnow)
+
     def __init__(self, email_address, password):
         # Generate password hash
         password_hash = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
@@ -46,13 +53,6 @@ class Account(db.Model):
             "creation_time": self.creation_time.replace(tzinfo=timezone.utc).isoformat(),
         }
         return account_info
-
-    id = Column(UnsignedInt, primary_key=True)
-    email_address_id = Column(UnsignedInt, ForeignKey("email_address.id"), nullable=False, unique=True)
-    email_address = relationship("EmailAddress")
-    password_hash = Column(BINARY(60), nullable=False)
-    is_developer = Column(Boolean, nullable=False, default=False)
-    creation_time = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
         return f"<Account '{self.email_address}'>"
@@ -71,15 +71,15 @@ class AccessToken(db.Model):
             if db.session.query(AccessToken).filter_by(token=token).count() == 0:
                 return token
 
-    def is_expired(self):
-        return datetime.utcnow() > self.creation_time + self.duration
-
     id = Column(UnsignedInt, primary_key=True)
     account_id = Column(UnsignedInt, ForeignKey("account.id"), nullable=False)
     account = relationship("Account")
     token = Column(String(64), nullable=False, unique=True, default=generate_access_token)
     creation_time = Column(DateTime, nullable=False, default=datetime.utcnow)
     duration = Column(Interval, nullable=False)
+
+    def is_expired(self):
+        return datetime.utcnow() > self.creation_time + self.duration
 
     def __repr__(self):
         return f"<AuthenticationToken #{self.id}>"
@@ -93,15 +93,15 @@ class EmailAddress(db.Model):
 
     __tablename__ = "email_address"
 
+    id = Column(UnsignedInt, primary_key=True)
+    hash = Column(BINARY(16), nullable=False, unique=True)
+    email_address = Column(String(255), nullable=False)
+
     def __init__(self, email_address):
         # Generate hash from the email address automatically
         email_hash = mmh3.hash128(email_address)
         email_hash = email_hash.to_bytes(16, byteorder="big")
         super().__init__(hash=email_hash, email_address=email_address)
-
-    id = Column(UnsignedInt, primary_key=True)
-    hash = Column(BINARY(16), nullable=False, unique=True)
-    email_address = Column(String(255), nullable=False)
 
     def __repr__(self):
         return f"<EmailAddress '{self.email_address}'>"
@@ -145,6 +145,7 @@ class Team(db.Model):
     """A team of players working together. Can own assets and money."""
 
     __tablename__ = "team"
+
     id = Column(UnsignedInt, primary_key=True)
     name = Column(String(32), nullable=False, unique=True)
     picture = Column(BINARY(128), nullable=False)
@@ -183,6 +184,7 @@ class Inventory(db.Model):
     """A container for assets."""
 
     __tablename__ = "inventory"
+
     id = Column(UnsignedInt, primary_key=True)
     quantity_limit = Column(UnsignedInt)
     volume_limit = Column(UnsignedFloat)
@@ -195,6 +197,7 @@ class Asset(db.Model):
     """An ownable item, owned by an entity."""
 
     __tablename__ = "asset"
+
     id = Column(UnsignedInt, primary_key=True)
     entity_id = Column(UnsignedInt, ForeignKey("entity.id"), nullable=False)
     entity = relationship("Entity")
@@ -207,6 +210,7 @@ class Resource(db.Model):
     """An asset as stored in an inventory, holds all the inventory-related attributes of an asset."""
 
     __tablename__ = "resource"
+
     id = Column(UnsignedInt, primary_key=True)
     asset_id = Column(UnsignedInt, ForeignKey("asset.id"), nullable=False, unique=True)
     asset = relationship("Asset")
@@ -226,6 +230,7 @@ class ResourceType(db.Model):
     """A single 'class' of asset (eg. iron ore, improved heatsink, light tyre)"""
 
     __tablename__ = "resource_type"
+
     id = Column(UnsignedInt, primary_key=True)
     mass = Column(UnsignedDecimal(10, 3), nullable=False)
     volume = Column(UnsignedDecimal(10, 3), nullable=False)
@@ -268,6 +273,7 @@ class WorldEntity(db.Model):
     """An asset as a 3D object physically in the game world."""
 
     __tablename__ = "world_entity"
+
     id = Column(UnsignedInt, primary_key=True)
     location_dome_id = Column(UnsignedInt, ForeignKey("dome.id"), nullable=False)
     location_dome = relationship("Dome")

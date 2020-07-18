@@ -64,32 +64,6 @@ function set_error_message(message) {
     error_message.innerHTML = message;
 }
 
-function send_request(url, callback, body_data = null, method = null) {
-    var request = new XMLHttpRequest();
-    if (method === null) {
-        if (body_data === null) {
-            method = "GET";
-        } else {
-            method = "POST";
-        }
-    }
-
-    request.onreadystatechange = function() {
-        if (this.readyState == 4) { // state 4 means completed
-            callback(this);
-        }
-    };
-
-    request.responseType = "json"
-    request.open(method, url);
-    if (body_data !== null) {
-        request.setRequestHeader("Content-Type", "application/json");
-        body_data = JSON.stringify(body_data);
-        request.send(body_data);
-    } else {
-        request.send();
-    }
-}
 
 function reset_error_state() {
     document.getElementById("email").classList.remove("error");

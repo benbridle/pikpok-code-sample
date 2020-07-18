@@ -6,6 +6,10 @@ app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 
+from app import models
+
+db.create_all()
+
 # These imports import from this module to get database
 # access, so they're kept at the bottom of the module to
 # prevent cyclic imports.

@@ -4,7 +4,7 @@ Note: a live demo of this code sample can be accessed by visiting http://doctrin
 
 ## Background
 
-This code sample contains the current Web API and account management website for an MMO game called Doctrine that is in early development. In Doctrine, players will construct and pilot remotely-controlled vehicles in order to explore a post-apocalyptic Earth, scavenge for resources, construct sprawling bases, and fight back against the relentless expansion of a rampant artificial intelligence.
+This code sample contains the current Web API and account management website for an MMO game called Doctrine that is in early development. In Doctrine, players will construct and pilot remotely-controlled vehicles in order to explore a post-apocalyptic Earth, scavenge for resources, work together to construct sprawling bases, and fight back against the relentless expansion of a rampant artificial intelligence.
 
 ## Setup
 ### Installing system dependencies

@@ -10,7 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Karla:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500&display=swap" rel="stylesheet">
     <script src="{{ url_for('static', filename='scripts/doctrine_api.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/dashboard.js') }}"></script>
 
     <title>Doctrine</title>
 </head>
@@ -20,13 +22,45 @@
         <div class="dashboard-header">
             <h2 class="small-title">ACCOUNT DASHBOARD</h2>
             <h2 class="small-title subtle" style="font-size: 1.1em; text-transform: uppercase;"></h2>
-            <button>LOG OUT</button>
+            <button class="danger" onclick="log_out()">LOG OUT</button>
         </div>
         <div class="card">
-            <p>Email address:</p>
-            <p>Account age:</p>
-            <p>Developer:</p>
+            <table class="keyvalue center">
+                <tr>
+                    <td>Email address:</td>
+                    <td id="account-email"></td>
+                </tr>
+                <tr>
+                    <td>Created on:</td>
+                    <td id="account-created-on"></td>
+                </tr>
+                <tr>
+                    <td>Developer:</td>
+                    <td id="account-is-developer"></td>
+                </tr>
+            </table>
             <hr>
+            <div class="spacer"></div>
+            <h2>SELECT A PROFILE TO CONTINUE</h2>
+            <div id="profile-container" class="profile-container">
+                <div id="create-profile" class="profile-card-create" onclick="create_profile('name',123123123123123)">
+                    <img class="vertical-center" style="filter: opacity(0.65); " src="{{ url_for( 'static', filename='images/plus_symbol.svg' ) }} "></img>
+                    <button class="vertical-center">CREATE PROFILE</button>
+                </div>
+            </div>
         </div>
     </div>
+
+    <div id="toolbox" class="gone">
+        <div class="profile-card">
+            <div class="profile-image">
+            </div>
+            <h1>profile_name</h1>
+            <h2>$4301.29</h1>
+        </div>
+    </div>
+
+    <script>
+        get_account_information();
+    </script>
 </body>

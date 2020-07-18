@@ -1,68 +1,65 @@
-* {
-    box-sizing: border-box;
-}
-
 html,
 *,
 body {
+    /* Set some sane defaults */
     margin: 0px;
     padding: 0px;
     font-family: 'Karla', sans-serif;
-    /* font-family: 'Source Sans Pro', sans-serif; */
+    font-family: 'Heebo', sans-serif;
+    font-weight: 400;
+    box-sizing: border-box;
+    color: black;
+}
+
+img {
+    max-width: 100%;
+}
+
+h1,
+h2,
+h3 {
+    font-family: 'Work Sans', sans-serif;
 }
 
 .vertical-center {
+    /* Center any element vertically */
     position: absolute;
-    top: 45%;
+    top: 50%;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
 
+.nudge-up {
+    top: 45%;
+}
+
 .main-title {
-    font-family: 'Work Sans', sans-serif;
-    text-align: center;
-    color: black;
-}
-
-h1.main-title {
+    /* DOCTRINE title on main page */
     font-size: 4em;
-}
-
-.small-title {
-    font-family: 'Work Sans', sans-serif;
     text-align: center;
-    color: black;
-}
-
-h1.small-title {
-    font-size: 2.6em;
-}
-
-h2.small-title {
-    font-size: 1.6em;
 }
 
 .subtitle {
+    /* Subtitle on main page */
     font-size: 1em;
-    font-family: 'Work Sans', sans-serif;
     text-align: center;
     letter-spacing: 5px;
-    color: black;
     margin-top: -10px;
     margin-bottom: 1em;
 }
 
 input {
     display: block;
+    padding: 4px 6px;
     margin: 6px auto;
     width: 100%;
     font-family: 'IBM Plex Mono', monospace;
     border: 2px solid #666;
     border-radius: 4px;
-    padding: 4px 6px;
-    /* remove autofill yellow background*/
+    /* remove autofill yellow background (Firefox) */
     filter: none;
+    /* remove default red error outline (Firefox) */
     box-shadow: none;
 }
 
@@ -75,8 +72,8 @@ p.error {
 }
 
 button {
-    display: block;
     font-family: 'Karla', sans-serif;
+    display: block;
     padding: 2px 6px;
     color: white;
     background-color: black;
@@ -95,7 +92,14 @@ button.center {
     margin: 6px auto;
 }
 
+button.danger:hover {
+    border-color: #d00000;
+    background-color: white;
+    color: #d00000;
+}
+
 .card {
+    /* A container with a rounded black border and some padding */
     border: 3px solid black;
     border-radius: 4px;
     padding: 10px 20px;
@@ -103,11 +107,16 @@ button.center {
     min-width: 280px;
 }
 
-.card>h2 {
-    color: black;
+.card h1 {
+    font-size: 2.6em;
+}
+
+.card h2 {
     font-size: 1.6em;
-    text-align: center;
-    font-family: 'Work Sans', sans-serif;
+}
+
+.card a {
+    font-family: 'Karla', sans-serif;
 }
 
 .subtle {
@@ -133,26 +142,20 @@ a.subtle:hover {
     height: 20px;
 }
 
-.hidden {
-    visibility: hidden;
+.center {
+    margin: auto;
 }
 
 .loader {
+    /* Element to replace a clicked button, taking up the same space */
     font-family: 'Karla', sans-serif;
     margin: 9px auto;
     padding: 2px 6px;
-    color: black;
     font-size: 1em;
 }
 
-.gone {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    display: none;
-}
-
 div.dashboard-container {
+    /* Wraps the entire dashboard, keeps it from touching the edge of the screen */
     max-width: 700px;
     margin: 40px auto;
 }
@@ -163,4 +166,93 @@ div.dashboard-header {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 4px;
+}
+
+div.profile-container {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    overflow: auto;
+    margin: 10px 0;
+}
+
+div.profile-card,
+div.profile-card-create {
+    width: 180px;
+    min-width: 180px;
+    height: 280px;
+    border: 2px solid #888;
+    border-radius: 4px;
+    margin: 16px 8px;
+    cursor: pointer;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+div.profile-card:hover {
+    /* background-color: grey; */
+    box-shadow: 0 0 16px #0008;
+    border-color: #666;
+    transition: ease 0.15s;
+}
+
+div.profile-card-create {
+    border-style: dashed;
+    display: block;
+    position: relative;
+    white-space: nowrap;
+}
+
+div.profile-card-create:hover {
+    /* background-color: grey; */
+    box-shadow: 0 0 16px #0005;
+    border-color: #aaa;
+    transition: ease 0.15s;
+}
+
+div.profile-card div.profile-image {
+    width: 60%;
+    padding-top: 60%;
+}
+
+div.profile-image {
+    background-color: red;
+}
+
+.profile-card h1 {
+    font-size: 1.2em;
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+.profile-card h2 {
+    font-size: 1em;
+}
+
+table.keyvalue td {
+    padding: 0 8px;
+}
+
+table.keyvalue td:first-child {
+    text-align: right;
+    font-weight: 500;
+}
+
+table.keyvalue td:last-child {
+    text-align: left;
+    min-width: 30ch;
+}
+
+.hidden {
+    /* Make an element invisible, but still take up space */
+    visibility: hidden;
+}
+
+.gone {
+    /* Remove an element from the page */
+    margin: 0;
+    padding: 0;
+    border: 0;
+    display: none;
 }

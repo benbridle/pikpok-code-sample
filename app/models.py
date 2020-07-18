@@ -300,6 +300,8 @@ class TransactionEvent:
 class FinancialTransaction:
     """Financial exchange component of a transaction."""
 
+    __tablename__ = "financial_transaction"
+
     id = Column(UnsignedInt, primary_key=True)
     value = Column(Decimal(12, 2), nullable=False)
     sending_wallet_id = Column(UnsignedInt, ForeignKey("wallet.id"), nullable=False)
@@ -315,6 +317,8 @@ class FinancialTransaction:
 
 class AssetTransaction:
     """Asset exchange component of a transaction."""
+
+    __tablename__ = "asset_transaction"
 
     id = Column(UnsignedInt, primary_key=True)
     asset_id = Column(UnsignedInt, ForeignKey("asset.id"), nullable=False)
@@ -332,6 +336,8 @@ class AssetTransaction:
 
 class AccountSignInEvent:
     """Logs the time an account was signed in to."""
+
+    __tablename__ = "account_sign_in_event"
 
     id = Column(UnsignedInt, primary_key=True)
     account_id = Column(UnsignedInt, ForeignKey("account.id"), nullable=False)

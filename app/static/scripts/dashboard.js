@@ -12,6 +12,7 @@ function get_account_information_callback(response) {
         add_profile_card(profile.name, profile.entity.wallet.value);
     });
     initialise_profile_images();
+    initialise_palette();
 }
 
 function add_profile_card(name, money, picture) {

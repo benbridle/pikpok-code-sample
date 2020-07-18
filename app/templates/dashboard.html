@@ -55,7 +55,9 @@
         <div id="create-profile-modal" class="card gone">
             <h1>CREATE NEW PROFILE</h1>
             <form id="create-profile-form">
-                <canvas class="profile-image" width="176px" height="176px"></canvas>
+                <canvas id="new-profile-image" class="profile-image" width="176px" height="176px"></canvas>
+                <br>
+                <canvas id="palette" class="profile-image" width="176px" height="44px"></canvas>
                 <input id="profile-name" type="text" placeholder="Profile name" style="max-width: 400px;" maxlength="32" size="1"></input>
                 <div class="horizontal-center">
                     <button type="submit">CREATE PROFILE</button>

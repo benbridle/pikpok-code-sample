@@ -18,12 +18,16 @@ var palette = [
 ]
 
 class ProfileImage {
-    constructor(image_canvas) {
+    constructor(image_canvas, width = 16, height = 16) {
         this.canvas = image_canvas;
-        this.pixel_size = this.canvas.getAttribute("width").slice(0, -2) / 16;
+        this.width = width;
+        this.height = height;
 
-        // Canvas must already be square, and preferably the dimensions are divisible by 16
-        console.log(this.pixel_size);
+        // Calculate size of an image pixel
+        // Canvas must already be square, and preferably have dimensions divisible by 16
+        console.log(this.canvas)
+        this.pixel_size = this.canvas.getAttribute("width").slice(0, -2) / this.width;
+
         // Disable right-click menu
         this.canvas.setAttribute('oncontextmenu', 'return false;');
         // Create blank image
@@ -31,10 +35,11 @@ class ProfileImage {
         this.render();
     }
 
-    clear() {
-        this.image = Array(16);
-        for (var i = 0; i < 16; i++) {
-            this.image[i] = Array(16).fill(11);
+    clear(colour_index = 11) {
+        // Fill image with white
+        this.image = Array(this.height);
+        for (var i = 0; i < this.height; i++) {
+            this.image[i] = Array(this.width).fill(colour_index);
         }
     }
 
@@ -130,8 +135,8 @@ class ProfileImage {
 
     // Redraw the full image on the canvas
     render() {
-        for (var y = 0; y < 16; y++) {
-            for (var x = 0; x < 16; x++) {
+        for (var y = 0; y < this.height; y++) {
+            for (var x = 0; x < this.width; x++) {
                 this.draw_pixel([x, y], this.image[y][x]);
             }
         }
@@ -150,11 +155,6 @@ class ProfileImage {
         var pxl_y = Math.trunc(coords[1] / this.pixel_size);
         return [pxl_x, pxl_y]
     }
-
-    load_from_int(int) {
-        //
-    }
-
 }
 
 // class PaintController {
@@ -180,7 +180,7 @@ class ProfileImage {
 //     }
 
 //     paint_pixel(coords, colour_index) {
-//         this.pxl_image.set_pixel(coords, colour_index);
+//         this.pxl_image.set_pixel_colour(coords, colour_index);
 //         this.pxl_image.render();
 //         this.b64_element.innerHTML = this.pxl_image.to_base64();
 //     }
@@ -209,66 +209,62 @@ class ProfileImage {
 //     }
 // }
 
-// class ColourPalette extends ProfileImage {
-//     constructor(width, height, pxl_size, canvas_element, default_colour = 1) {
-//         super(width, height, pxl_size, canvas_element, default_colour);
-//         this.selected_colour = 0;
-//         this.draw_palette(palette);
-//         this.canvas.addEventListener('mousemove', this.onhover.bind(this), false)
-//         this.canvas.addEventListener('mouseout', this.mouseout.bind(this), false)
-//         this.canvas.addEventListener('click', this.onclick.bind(this), false)
-//     }
+class ColourPalette extends ProfileImage {
+    constructor(image_canvas, width, height, profile_image_element) {
+        super(image_canvas, width, height);
+        this.selected_colour = 0;
+        this.draw_palette(palette);
+        this.canvas.addEventListener('mousemove', this.onhover.bind(this), false)
+        this.canvas.addEventListener('mouseout', this.mouseout.bind(this), false)
+        this.canvas.addEventListener('click', this.onclick.bind(this), false)
+    }
 
-//     set_colour(colour_index) {
-//         this.selected_colour = colour_index;
-//         this.render();
-//     }
+    set_colour(colour_index) {
+        this.selected_colour = colour_index;
+        this.render();
+    }
 
-//     mouseout() {
-//         this.render();
-//     }
+    mouseout() {
+        this.render();
+    }
 
-//     index_to_coords(index) {
-//         var y = 0;
-//         if (index >= 8) {
-//             y = 1;
-//         };
-//         var x = index % 8;
-//         return [x, y];
-//     }
+    index_to_coords(index) {
+        var y = 0;
+        if (index >= 8) {
+            y = 1;
+        };
+        var x = index % 8;
+        return [x, y];
+    }
 
-//     render() {
-//         super.render();
-//         var colour = 11
-//             // Dark colour if white of light-grey are selected 
-//             // if (this.selected_colour == 11 || this.selected_colour == 12) {
-//             //     colour = 14;
-//             // }
-//         this.mark_pixel_with_colour(this.index_to_coords(this.selected_colour), colour);
-//     }
+    render() {
+        super.render();
+        var colour = 11
+        this.mark_pixel_with_colour(this.index_to_coords(this.selected_colour), colour);
+    }
 
-//     onhover(event) {
-//         var coords = this.event_to_pixels(event);
-//         this.render();
-//         this.outline_pixel(coords, 12, 4);
-//     }
+    onhover(event) {
+        var coords = this.event_to_pixels(event);
+        this.render();
+        this.outline_pixel(coords, 12, 4);
+    }
 
-//     onclick(event) {
-//         var coords = this.event_to_pixels(event);
-//         this.selected_colour = this.get_pixel_colour(coords);
-//         this.render();
-//         // this.highlight_pixel(coords);
-//     }
+    onclick(event) {
+        var coords = this.event_to_pixels(event);
+        this.selected_colour = this.get_pixel_colour(coords);
+        this.render();
+        // this.highlight_pixel(coords);
+    }
 
-//     draw_palette(palette) {
-//         var i = 0
-//         for (i; i < palette.length; i++) {
-//             this.set_pixel(this.index_to_coords(i), i);
-//         }
-//         this.render();
+    draw_palette(palette) {
+        var i = 0
+        for (i; i < palette.length; i++) {
+            this.set_pixel_colour(this.index_to_coords(i), i);
+        }
+        this.render();
 
-//     }
-// }
+    }
+}
 
 // Internet explorer icon
 
@@ -286,9 +282,15 @@ class ProfileImage {
 // pxl_image.render();
 
 function initialise_profile_images() {
-    canvas_elements = document.getElementsByClassName("profile-image");
-    console.log(canvas_elements);
+    var canvas_elements = document.getElementsByClassName("profile-image");
     for (i = 0; i < canvas_elements.length; i++) {
         canvas_elements[i].profile_image = new ProfileImage(canvas_elements[i]);
     }
+}
+
+function initialise_palette() {
+    var palette_canvas = document.getElementById("palette");
+    var new_profile_image = document.getElementById("new-profile-image");
+
+    palette_canvas.palette = new ColourPalette(palette_canvas, 8, 2, new_profile_image);
 }

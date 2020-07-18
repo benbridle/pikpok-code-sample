@@ -157,57 +157,54 @@ class ProfileImage {
     }
 }
 
-// class PaintController {
-//     constructor(pixel_image, colour_palette, b64_element) {
-//         this.pxl_image = pixel_image;
-//         this.pxl_image.canvas.addEventListener('click', this.onclick.bind(this), false);
-//         this.pxl_image.canvas.addEventListener('auxclick', this.onauxclick.bind(this), false);
-//         this.pxl_image.canvas.addEventListener('mousemove', this.onhover.bind(this), false);
-//         this.pxl_image.canvas.addEventListener('mouseout', this.mouseout.bind(this), false);
+class PaintController {
+    constructor(profile_image, colour_palette) {
+        this.profile_image = profile_image;
+        this.profile_image.canvas.addEventListener('click', this.onclick.bind(this), false);
+        this.profile_image.canvas.addEventListener('auxclick', this.onauxclick.bind(this), false);
+        this.profile_image.canvas.addEventListener('mousemove', this.onhover.bind(this), false);
+        this.profile_image.canvas.addEventListener('mouseout', this.mouseout.bind(this), false);
 
-//         this.colour_palette = colour_palette;
-//         this.b64_element = b64_element;
-//         this.b64_element.innerHTML = this.pxl_image.to_base64();
-//     }
+        this.colour_palette = colour_palette;
+    }
 
-//     get_paint_colour() {
-//         return this.colour_palette.selected_colour;
-//     }
+    get_paint_colour() {
+        return this.colour_palette.selected_colour;
+    }
 
-//     mouseout(event) {
-//         // Removes last highlight when mouse leaves canvas
-//         this.pxl_image.render();
-//     }
+    mouseout(event) {
+        // Removes last highlight when mouse leaves canvas
+        this.profile_image.render();
+    }
 
-//     paint_pixel(coords, colour_index) {
-//         this.pxl_image.set_pixel_colour(coords, colour_index);
-//         this.pxl_image.render();
-//         this.b64_element.innerHTML = this.pxl_image.to_base64();
-//     }
+    paint_pixel(coords, colour_index) {
+        this.profile_image.set_pixel_colour(coords, colour_index);
+        this.profile_image.render();
+    }
 
-//     onclick(event) {
-//         var coords = this.pxl_image.event_to_pixels(event);
-//         this.paint_pixel(coords, this.get_paint_colour());
-//         this.onhover(event);
-//     }
+    onclick(event) {
+        var coords = this.profile_image.event_to_pixels(event);
+        this.paint_pixel(coords, this.get_paint_colour());
+        this.onhover(event);
+    }
 
-//     onauxclick(event) {
-//         var coords = this.pxl_image.event_to_pixels(event);
-//         var clicked_colour = this.pxl_image.get_pixel_colour(coords);
-//         this.colour_palette.set_colour(clicked_colour);
-//         this.onhover(event);
-//     }
+    onauxclick(event) {
+        var coords = this.profile_image.event_to_pixels(event);
+        var clicked_colour = this.profile_image.get_pixel_colour(coords);
+        this.colour_palette.set_colour(clicked_colour);
+        this.onhover(event);
+    }
 
-//     onhover(event) {
-//         var coords = this.pxl_image.event_to_pixels(event);
-//         this.pxl_image.render();
-//         if (event.buttons == 1) {
-//             this.paint_pixel(coords, this.get_paint_colour());
-//         }
-//         this.pxl_image.outline_pixel(coords, 11);
-//         this.pxl_image.mark_pixel_with_colour(coords, this.get_paint_colour());
-//     }
-// }
+    onhover(event) {
+        var coords = this.profile_image.event_to_pixels(event);
+        this.profile_image.render();
+        if (event.buttons == 1) {
+            this.paint_pixel(coords, this.get_paint_colour());
+        }
+        this.profile_image.outline_pixel(coords, 11);
+        this.profile_image.mark_pixel_with_colour(coords, this.get_paint_colour());
+    }
+}
 
 class ColourPalette extends ProfileImage {
     constructor(image_canvas, width, height, profile_image_element) {
@@ -274,12 +271,12 @@ class ColourPalette extends ProfileImage {
 // var palette_canvas = document.getElementById("paint-palette");
 // var b64_element = document.getElementById("hex-field");
 
-// var pxl_image = new ProfileImage(16, 16, 32, image_canvas, default_colour = 12);
-// pxl_image.from_base64(b64_string);
+// var profile_image = new ProfileImage(16, 16, 32, image_canvas, default_colour = 12);
+// profile_image.from_base64(b64_string);
 // var colour_palette = new ColourPalette(8, 2, 64, palette_canvas, default_colour = 0);
-// var paint_controller = new PaintController(pxl_image, colour_palette, b64_element);
+// var paint_controller = new PaintController(profile_image, colour_palette, b64_element);
 
-// pxl_image.render();
+// profile_image.render();
 
 function initialise_profile_images() {
     var canvas_elements = document.getElementsByClassName("profile-image");
@@ -293,4 +290,5 @@ function initialise_palette() {
     var new_profile_image = document.getElementById("new-profile-image");
 
     palette_canvas.palette = new ColourPalette(palette_canvas, 8, 2, new_profile_image);
+    paint_controller = new PaintController(new_profile_image.profile_image, palette_canvas.palette)
 }

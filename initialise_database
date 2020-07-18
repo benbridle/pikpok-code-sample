@@ -1,0 +1,8 @@
+#!/bin/bash
+# Creates the MySQL database, tables, and user
+
+sudo mysql -N < scripts/create_user_and_database.sql
+. venv/bin/activate
+echo "Creating all database tables"
+python3 scripts/create_tables.py
+echo "Done"

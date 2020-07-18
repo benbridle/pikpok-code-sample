@@ -51,6 +51,7 @@ class Account(db.Model):
             "id": self.id,
             "email_address": str(self.email_address),
             "creation_time": self.creation_time.replace(tzinfo=timezone.utc).isoformat(),
+            "is_developer": self.is_developer,
             "profiles": [
                 profile._asdict(embed_account=False) for profile in Profile.query.filter_by(account=self).all()
             ],

@@ -25,13 +25,18 @@ python3 -m venv venv
 To install all required python packages into the virtual environment, run:
 ```
 . venv/bin/activate
+pip3 install wheel
 pip3 install -r requirements.txt
 ```
 
-Before the server is first run, the MySQL database and user need to be created by running:
+(Note: `wheel` must be manually installed before installing the rest of the requirements in order to prevent installation errors with `mysqlclient`)
+
+Before the server is first run, the MySQL database, tables, and user need to be created by running:
 ```
-sudo mysql -N < scripts/create_user_and_database.sql
+./initialise_database
 ```
+
+
 
 ## Usage
 To begin serving the application, run:

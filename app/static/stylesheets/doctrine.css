@@ -15,6 +15,10 @@ img {
     max-width: 100%;
 }
 
+hr {
+    margin: 10px auto;
+}
+
 h1,
 h2,
 h3 {
@@ -32,6 +36,13 @@ h3 {
 
 .nudge-up {
     top: 45%;
+}
+
+.horizontal-center {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
 }
 
 .main-title {
@@ -69,6 +80,7 @@ input.error {
 
 p.error {
     color: #ff3535;
+    font-family: 'Karla', sans-serif;
 }
 
 button {
@@ -80,6 +92,7 @@ button {
     border: 3px solid black;
     border-radius: 4px;
     font-size: 1em;
+    margin: 6px 6px;
 }
 
 button:hover {
@@ -105,6 +118,7 @@ button.danger:hover {
     padding: 10px 20px;
     text-align: center;
     min-width: 280px;
+    background-color: white;
 }
 
 .card h1 {
@@ -200,9 +214,8 @@ div.profile-card:hover {
 
 div.profile-card-create {
     border-style: dashed;
-    display: block;
-    position: relative;
     white-space: nowrap;
+    justify-content: center;
 }
 
 div.profile-card-create:hover {
@@ -212,15 +225,6 @@ div.profile-card-create:hover {
     transition: ease 0.15s;
 }
 
-div.profile-card div.profile-image {
-    width: 60%;
-    padding-top: 60%;
-}
-
-div.profile-image {
-    background-color: red;
-}
-
 .profile-card h1 {
     font-size: 1.2em;
     font-family: 'IBM Plex Mono', monospace;
@@ -228,6 +232,13 @@ div.profile-image {
 
 .profile-card h2 {
     font-size: 1em;
+}
+
+canvas.profile-image {
+    background-color: navy;
+    margin: 20px;
+    border: 3px solid #333;
+    border-radius: 4px;
 }
 
 table.keyvalue td {
@@ -255,4 +266,11 @@ table.keyvalue td:last-child {
     padding: 0;
     border: 0;
     display: none;
+}
+
+.cover-page {
+    width: 100%;
+    padding-top: 100%;
+    position: absolute;
+    top: 0;
 }

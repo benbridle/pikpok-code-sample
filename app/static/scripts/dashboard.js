@@ -11,6 +11,7 @@ function get_account_information_callback(response) {
     response.response.profiles.forEach(profile => {
         add_profile_card(profile.name, profile.entity.wallet.value);
     });
+    initialise_profile_images();
 }
 
 function add_profile_card(name, money, picture) {
@@ -21,6 +22,33 @@ function add_profile_card(name, money, picture) {
     new_card.getElementsByTagName("h2")[0].innerHTML = "$" + money.toFixed(2);;
     document.getElementById("profile-container").insertBefore(new_card, reference_card);
 }
+
+function randomise_profile_image() {
+    send_request("/api/generators/profile_image", randomise_profile_image_callback);
+}
+
+function randomise_profile_image_callback(response) {
+    var modal = document.getElementById("create-profile-modal")
+    var profile_image = modal.getElementsByClassName("profile-image")[0].profile_image;
+    profile_image.from_base64(response.response.image)
+    profile_image.render();
+}
+
+function show_create_profile_modal() {
+    var modal = document.getElementById("create-profile-modal")
+    modal.classList.remove("gone");
+    document.getElementById("fade-background").classList.remove("gone");
+    var profile_image = modal.getElementsByClassName("profile-image")[0].profile_image;
+    profile_image.clear();
+    profile_image.render();
+    randomise_profile_image();
+}
+
+function hide_create_profile_modal() {
+    document.getElementById("create-profile-modal").classList.add("gone");
+    document.getElementById("fade-background").classList.add("gone");
+}
+
 
 function create_profile(name, picture) {
     body_data = {

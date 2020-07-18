@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500&display=swap" rel="stylesheet">
     <script src="{{ url_for('static', filename='scripts/doctrine_api.js') }}"></script>
     <script src="{{ url_for('static', filename='scripts/dashboard.js') }}"></script>
-
+    <script src="{{ url_for('static', filename='scripts/profile_image_editor.js') }}"></script>
     <title>Doctrine</title>
 </head>
 
@@ -40,27 +40,49 @@
                 </tr>
             </table>
             <hr>
-            <div class="spacer"></div>
             <h2>SELECT A PROFILE TO CONTINUE</h2>
             <div id="profile-container" class="profile-container">
-                <div id="create-profile" class="profile-card-create" onclick="create_profile('name',123123123123123)">
-                    <img class="vertical-center" style="filter: opacity(0.65); " src="{{ url_for( 'static', filename='images/plus_symbol.svg' ) }} "></img>
-                    <button class="vertical-center">CREATE PROFILE</button>
+                <div id="create-profile" class="profile-card-create" onclick="show_create_profile_modal()">
+                    <img style="filter: opacity(0.65); width:50%; margin: 20px;" src="{{ url_for( 'static', filename='images/plus_symbol.svg' ) }} "></img>
+                    <p class="loader">CREATE PROFILE</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <div id="fade-background" class="cover-page gone" style="background-color: white; opacity: 0.8;"></div>
+    <div class="vertical-center">
+        <div id="create-profile-modal" class="card gone">
+            <h1>CREATE NEW PROFILE</h1>
+            <form id="create-profile-form">
+                <canvas class="profile-image" width="176px" height="176px"></canvas>
+                <input id="profile-name" type="text" placeholder="Profile name" style="max-width: 400px;" maxlength="32" size="1"></input>
+                <div class="horizontal-center">
+                    <button type="submit">CREATE PROFILE</button>
+                    <button class="danger" onclick="hide_create_profile_modal()">CANCEL</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div id="toolbox" class="gone">
         <div class="profile-card">
-            <div class="profile-image">
-            </div>
-            <h1>profile_name</h1>
-            <h2>$4301.29</h1>
+            <canvas class="profile-image" width="112px" height="112px">
+            </canvas>
+            <h1>Profile_Name</h1>
+            <h2>$money</h1>
         </div>
     </div>
 
     <script>
         get_account_information();
+
+        var form = document.getElementById("create-profile-form");
+        form.addEventListener('submit', function(event) {
+            var name = document.getElementById("profile-name").value;
+            event.preventDefault();
+        });
     </script>
+
+
 </body>

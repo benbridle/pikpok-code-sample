@@ -18,7 +18,7 @@
 
 <body>
     <div class="vertical-center nudge-up">
-        <div class="card">
+        <div id="create-account-card" class="card">
             <a class="plain" href="/">
                 <h1>DOCTRINE</h1>
             </a>
@@ -35,8 +35,13 @@
                 <a class="subtle" href="/login">[log in instead]</a>
             </form>
         </div>
+        <div id="continue-card" class="card gone">
+            <h2>SUCCESS</h2>
+            <p style="margin: 20px;">Your new account has been created.</p>
+            <button id="continue-button" class="center" onclick="create_account_continue()">CONTINUE</button>
+            <p id="continue-loader" class="loader gone">LOADING...</p>
+        </div>
     </div>
-
 
     <script>
         var form = document.getElementById("create-account-form");

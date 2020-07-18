@@ -18,8 +18,9 @@ function create_account(email_address, password) {
 function create_account_callback(response) {
     hide_loader();
     switch (response.status) {
-        case 201: //TODO: Make success show a 'account created, continue?' modal
-            window.location.replace("/dashboard");
+        case 201:
+            document.getElementById("create-account-card").classList.add("gone");
+            document.getElementById("continue-card").classList.remove("gone");
             break;
         case 409:
             set_error_message("Email address already in use");
@@ -29,6 +30,14 @@ function create_account_callback(response) {
             set_error_message("An error has occurred");
             break;
     }
+}
+
+function create_account_continue() {
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;
+    document.getElementById("continue-loader").classList.remove("gone");
+    document.getElementById("continue-button").classList.add("gone");
+    log_in(email, password);
 }
 
 function log_in(email_address, password) {

@@ -11,6 +11,10 @@ bcrypt
 simplejson
 pillow
 
+# Packages for testing
+pytest
+requests
+
 # Development packages for VS Code
 black
 pylint

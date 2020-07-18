@@ -158,14 +158,25 @@ class Team(db.Model):
 class Entity(db.Model):
     """A 'legal person' who can own assets, either a profile or a team."""
 
+    __tablename__ = "entity"
+
+    id = Column(UnsignedInt, primary_key=True)
+    wallet_id = Column(UnsignedInt, ForeignKey("wallet.id"), nullable=False, unique=True)
+    wallet = relationship("Wallet")
+
+    def __init__(self):
+        # Create a wallet for the entity
+        wallet = Wallet(value=0)
+        db.session.add(wallet)
+        db.session.commit()
+        super().__init__(wallet=wallet)
+
     def _asdict(self):
         entity_info = {
             "id": self.id,
+            "wallet": self.wallet._asdict(),
         }
         return entity_info
-
-    __tablename__ = "entity"
-    id = Column(UnsignedInt, primary_key=True)
 
 
 class Inventory(db.Model):
@@ -272,10 +283,16 @@ class Wallet(db.Model):
     """Stores in-game money."""
 
     __tablename__ = "wallet"
+
     id = Column(UnsignedInt, primary_key=True)
     value = Column(UnsignedDecimal(12, 2), nullable=False)
-    entity_id = Column(UnsignedInt, ForeignKey("entity.id"), nullable=False)
-    entity = relationship("Entity")
+
+    def _asdict(self):
+        wallet_info = {
+            "id": self.id,
+            "value": self.value,
+        }
+        return wallet_info
 
     def __repr__(self):
         return f"<Wallet #{self.id}>"

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+./initialise_database
+echo -e "\nStarting tests"
+
+. venv/bin/activate
+
+# Silently start the Flask server
+./start_server > /dev/null 2>&1 &
+pytest
+kill %1

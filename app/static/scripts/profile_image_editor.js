@@ -25,7 +25,6 @@ class ProfileImage {
 
         // Calculate size of an image pixel
         // Canvas must already be square, and preferably have dimensions divisible by 16
-        console.log(this.canvas)
         this.pixel_size = this.canvas.getAttribute("width").slice(0, -2) / this.width;
 
         // Disable right-click menu
@@ -44,7 +43,7 @@ class ProfileImage {
     }
 
     from_base64(base64_string) {
-        base64_string = base64_string.replace("\n", "")
+        base64_string = base64_string.replace("\n", "");
         var bin_string = atob(base64_string);
         var flat_image = new Array();
 
@@ -278,17 +277,14 @@ class ColourPalette extends ProfileImage {
 
 // profile_image.render();
 
-function initialise_profile_images() {
-    var canvas_elements = document.getElementsByClassName("profile-image");
-    for (i = 0; i < canvas_elements.length; i++) {
-        canvas_elements[i].profile_image = new ProfileImage(canvas_elements[i]);
-    }
-}
-
 function initialise_palette() {
     var palette_canvas = document.getElementById("palette");
     var new_profile_image = document.getElementById("new-profile-image");
 
     palette_canvas.palette = new ColourPalette(palette_canvas, 8, 2, new_profile_image);
     paint_controller = new PaintController(new_profile_image.profile_image, palette_canvas.palette)
+}
+
+function initialise_profile_image(canvas_element) {
+    canvas_element.profile_image = new ProfileImage(canvas_element);
 }

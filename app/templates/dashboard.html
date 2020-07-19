@@ -82,6 +82,8 @@
         var form = document.getElementById("create-profile-form");
         form.addEventListener('submit', function(event) {
             var name = document.getElementById("profile-name").value;
+            var profile_image = document.getElementById("new-profile-image").profile_image.to_base64();
+            create_profile(name, profile_image);
             event.preventDefault();
         });
     </script>

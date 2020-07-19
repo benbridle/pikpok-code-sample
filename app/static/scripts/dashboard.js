@@ -72,9 +72,9 @@ function create_profile_callback(response) {
     console.log(response);
     switch (response.status) {
         case 201:
-    var profile = response.response;
+            var profile = response.response;
             console.log(profile.entity.wallet.value);
-    add_profile_card(profile.name, profile.entity.wallet.value, profile.picture);
+            add_profile_card(profile.name, profile.entity.wallet.value, profile.picture);
             hide_create_profile_modal();
             break;
         case 409:

@@ -3,11 +3,13 @@ function get_account_information() {
 }
 
 function get_account_information_callback(response) {
+    // Write account information to list at the top of the page
     document.getElementById("account-email").innerHTML = response.response.email_address;
     var created_on = new Date(response.response.creation_time)
     var date_options = { year: 'numeric', month: 'long', day: 'numeric' };
     document.getElementById("account-created-on").innerHTML = created_on.toLocaleDateString(undefined, date_options);
     document.getElementById("account-is-developer").innerHTML = response.response.is_developer;
+    // Add a profile card for each profile associated with the account
     response.response.profiles.forEach(profile => {
         add_profile_card(profile.name, profile.entity.wallet.value, profile.picture);
     });
@@ -40,6 +42,7 @@ function randomise_new_profile_image_callback(response) {
 }
 
 function show_create_profile_modal() {
+    // Shows the modal to create a new profile
     var modal = document.getElementById("create-profile-modal")
     modal.classList.remove("gone");
     document.getElementById("fade-background").classList.remove("gone");

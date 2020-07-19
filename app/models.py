@@ -5,6 +5,7 @@ import secrets
 from datetime import datetime, timezone
 from sqlalchemy.dialects.mysql import INTEGER, BINARY, DECIMAL, FLOAT
 from app import db
+from app.modules.profile_image import ProfileImage
 
 Column = db.Column
 Integer = db.Integer
@@ -134,7 +135,7 @@ class Profile(db.Model):
         profile_info = {
             "id": self.id,
             "name": self.name,
-            "picture": int.from_bytes(self.picture, byteorder="big"),
+            "picture": ProfileImage.from_bytes(self.picture).to_base64_string(),
             "entity": self.entity._asdict(),
             "creation_time": self.creation_time.replace(tzinfo=timezone.utc).isoformat(),
         }

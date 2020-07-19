@@ -5,7 +5,7 @@ from flask import jsonify, request, Blueprint
 from app import db
 from app.models import *
 from app import exceptions
-from app.modules.profile_image import generate_profile_image
+from app.modules.profile_image import generate_profile_image, ProfileImage
 
 
 api = Blueprint("api", __name__)
@@ -162,13 +162,14 @@ def get_profiles_metadata():
 def create_profile():
     account_id = get_body_field("account_id", field_type=int)
     restrict_access(account_id, "Only the owner of an account can create a profile for that account.")
-
     name = get_body_field("name")
     try:
-        picture = get_body_field("picture", field_type=int)
+        picture_string = get_body_field("picture", field_type=str)
+        picture = ProfileImage.from_base64_string(picture_string)
     except exceptions.MissingFieldError:
-        picture = int(generate_profile_image())
-    picture_bytes = picture.to_bytes(128, byteorder="big")
+        # If no picture is provided, generate one
+        picture = generate_profile_image()
+    picture_bytes = bytes(picture)
 
     account = Account.query.get(account_id)
     if account is None:
@@ -179,7 +180,6 @@ def create_profile():
     # Create the profile
     entity = Entity()
     db.session.add(entity)
-    # db.session.flush()
     profile = Profile(account=account, name=name, picture=picture_bytes, entity=entity)
     db.session.add(profile)
     db.session.commit()

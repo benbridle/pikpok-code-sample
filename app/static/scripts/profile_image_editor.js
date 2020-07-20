@@ -152,6 +152,13 @@ class ProfileImage {
     coord_to_pixels(coords) {
         var pxl_x = Math.trunc(coords[0] / this.pixel_size);
         var pxl_y = Math.trunc(coords[1] / this.pixel_size);
+        // Ensure that the returned coordinates are within the bounds of the
+        // canvas. This fixes an error where clicking at the edge of the canvas
+        // would return higher or lower values than allowed.
+        pxl_x = Math.max(0, pxl_x)
+        pxl_y = Math.max(0, pxl_y)
+        pxl_x = Math.min(pxl_x, this.width - 1)
+        pxl_y = Math.min(pxl_y, this.height - 1)
         return [pxl_x, pxl_y]
     }
 }

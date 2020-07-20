@@ -176,7 +176,7 @@ class Entity(db.Model):
 
     def __init__(self):
         # Create a wallet for the entity
-        wallet = Wallet(value=0)
+        wallet = Wallet(value=100)
         db.session.add(wallet)
         db.session.commit()
         super().__init__(wallet=wallet)

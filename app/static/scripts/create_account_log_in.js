@@ -52,7 +52,7 @@ function log_in_callback(response) {
     switch (response.status) {
         case 200:
             localStorage.setItem("access_token", response.response.token);
-            localStorage.setItem("account_id", response.response.account_id);
+            localStorage.setItem("account_id", response.response.account.id);
             window.location.replace('/dashboard');
             break;
         case 403:

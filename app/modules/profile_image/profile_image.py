@@ -67,6 +67,8 @@ class ProfileImage:
     def __int__(self):
         return int.from_bytes(bytes(self), byteorder="big")
 
+    def __eq__(self, other):
+        return self.image == other.image
 
     def to_PIL_image(self, palette=default_palette):
         """

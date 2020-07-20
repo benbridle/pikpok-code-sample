@@ -41,6 +41,14 @@ def test_create_account():
     assert_http_error(r, 409, "ResourceAlreadyExistsError")
 
 
+def get_authorization_header(email_address, password):
+    # Get access token
+    r = requests.post(f"{API_URL}/login", json={"email_address": email_address, "password": password})
+    access_token = r.json()["token"]
+    headers = {"Authorization": f"Bearer {access_token}"}
+    return headers
+
+
 def test_login():
     ENDPOINT_URL = f"{API_URL}/login"
 
@@ -57,11 +65,7 @@ def test_login():
 
 
 def test_get_account():
-    # Get access token
-    r = requests.post(f"{API_URL}/login", json={"email_address": "test@mail.com", "password": "test"})
-    access_token = r.json()["token"]
-    headers = {"Authorization": f"Bearer {access_token}"}
-
+    headers = get_authorization_header("test@mail.com", "test")
     r = requests.get(f"{API_URL}/accounts/2", headers=headers)
     assert_http_error(r, 403, "UnauthorizedAccessError")
 
@@ -72,4 +76,34 @@ def test_get_account():
 
 
 def test_create_profile():
-    pass
+    headers = get_authorization_header("test@mail.com", "test")
+
+    # Make profile for different account than the current one
+    r = requests.post(f"{API_URL}/profiles/", json={"account_id": 2, "name": "Test Profile"}, headers=headers)
+    assert_http_error(r, 403, "UnauthorizedAccessError")
+
+    # Successfully create a profile
+    r = requests.post(f"{API_URL}/profiles/", json={"account_id": 1, "name": "Test Profile"}, headers=headers)
+    assert r.status_code == 201
+    assert "id" in r.json()
+    assert "name" in r.json()
+    assert "picture" in r.json()
+    assert len(r.json()["picture"]) == 172
+
+    # Fail to make a profile with the same name as an existing profile
+    r = requests.post(f"{API_URL}/profiles/", json={"account_id": 1, "name": "Test Profile"}, headers=headers)
+    assert_http_error(r, 409, "ResourceAlreadyExistsError")
+
+
+def test_get_profile():
+    headers = get_authorization_header("test@mail.com", "test")
+
+    # Try to fetch a non-existant profile
+    r = requests.get(f"{API_URL}/profiles/2", headers=headers)
+    assert_http_error(r, 403, "UnauthorizedAccessError")
+
+    # Successfully fetch a profile belonging to the user
+    r = requests.get(f"{API_URL}/profiles/1", headers=headers)
+    assert r.status_code == 200
+    assert "id" in r.json()
+    assert "name" in r.json()

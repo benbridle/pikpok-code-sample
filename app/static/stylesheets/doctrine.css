@@ -163,8 +163,8 @@ a.subtle:hover {
 .loader {
     /* Element to replace a clicked button, taking up the same space */
     font-family: 'Karla', sans-serif;
-    margin: 9px auto;
-    padding: 2px 6px;
+    margin: 6px auto;
+    padding: 5px 6px;
     font-size: 1em;
 }
 

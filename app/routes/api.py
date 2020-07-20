@@ -196,16 +196,6 @@ def get_profile(profile_id):
     return jsonify(profile)
 
 
-@api.route("/actions/regenerate-db")
-def regenerate_database():
-    restrict_access()
-    """Helper endpoint for dropping and regenerating the database."""
-    query = "DROP DATABASE IF EXISTS doctrine_game; CREATE DATABASE doctrine_game; USE doctrine_game;"
-    db.session.execute(query)
-    db.create_all()
-    return "", 200
-
-
 @api.errorhandler(exceptions.BaseError)
 def base_error_handler(error):
     status_code = error.status_code or 500

@@ -188,9 +188,11 @@ def create_profile():
 
 @api.route("/profiles/<int:profile_id>")
 def get_profile(profile_id):
-    restrict_access()
     profile = Profile.query.get(profile_id)
     if profile is None:
+        # If the user isn't a developer, return an UnauthorizedAccessError
+        restrict_access()
+        # If the user is a developer, return a more informative error
         raise exceptions.ResourceNotFoundError("A profile with this ID was not found.")
     restrict_access(profile.account.id)
     return jsonify(profile)

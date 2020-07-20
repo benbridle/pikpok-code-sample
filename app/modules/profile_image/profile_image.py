@@ -4,23 +4,24 @@ from PIL import Image
 image_length = 16
 palette_size = 16
 default_palette = {
-     0: (232,0,0),  # red
-     1: (231,151,0),  # orange
-     2: (230,219,0),  # yellow
-     3: (146,226,51),  # lightgreen
-     4: (0,192,0),  # green
-     5: (1,229,242),  # cyan
-     6: (0,130,202),  # midblue
-     7: (6,0,238),  # blue
-     8: (255,166,209),  # lightpink
-     9: (226,62,255),  # pink
-    10: (130,2,129),  # purple
-    11: (255,255,255),  # white
-    12: (228,228,228),  # lightgrey
-    13: (136,135,137),  # grey
-    14: (34,34,34),  # darkgrey
-    15: (161,106,63),  # brown
+    0: (232, 0, 0),  # red
+    1: (231, 151, 0),  # orange
+    2: (230, 219, 0),  # yellow
+    3: (146, 226, 51),  # lightgreen
+    4: (0, 192, 0),  # green
+    5: (1, 229, 242),  # cyan
+    6: (0, 130, 202),  # midblue
+    7: (6, 0, 238),  # blue
+    8: (255, 166, 209),  # lightpink
+    9: (226, 62, 255),  # pink
+    10: (130, 2, 129),  # purple
+    11: (255, 255, 255),  # white
+    12: (228, 228, 228),  # lightgrey
+    13: (136, 135, 137),  # grey
+    14: (34, 34, 34),  # darkgrey
+    15: (161, 106, 63),  # brown
 }
+
 
 class ProfileImage:
     """A square pixel-art image for use as a profile picture. Each pixel is
@@ -80,8 +81,6 @@ class ProfileImage:
         pil_image.putdata(colour_data)
         return pil_image
 
-
-
     def fill(self, colour):
         """Fill the image with colour."""
         for y in range(self.height):
@@ -133,7 +132,7 @@ class ProfileImage:
         # Convert PIL Image to a 2-dimensional list
         mask = list(mask_image.getdata())
         mask_2d = [mask[i : i + self.width] for i in range(0, 256, self.width)]
-        
+
         # Apply mask to ProfileImage
         for y, row in enumerate(mask_2d):
             for x, value in enumerate(row):

@@ -112,7 +112,7 @@ def login():
     token = AccessToken(account=account, duration=timedelta(hours=24))
     db.session.add(token)
     db.session.commit()
-    return jsonify({"token": str(token), "account_id": account.id,})
+    return jsonify({"token": str(token), "account": account,})
 
 
 @api.route("/accounts/")

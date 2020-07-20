@@ -50,3 +50,13 @@ To begin serving the application, run:
 Open a web browser and navigate to `localhost:8004/` to use the application. 
 
 The Web API can be interacted with directly by visiting `localhost:8004/api/{endpoint}`. See `app/routes/api.py` for available endpoints.
+
+## Known bugs
+
+- On Google Chrome, using autofill in the 'Create account' and 'Login' forms changes the font.
+
+## Future work
+
+- Create tests for the web dashboard using Selenium.
+- Add functionality to interact with profiles inside the account dashboard.
+- Get the test suite to shut down the Flask server more elegantly

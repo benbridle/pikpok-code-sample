@@ -26,6 +26,7 @@ default_palette = {
 class ProfileImage:
     """A square pixel-art image for use as a profile picture. Each pixel is
     represented by an int, which references a colour on a palette."""
+
     def __init__(self):
         self.width = image_length
         self.height = image_length
@@ -34,22 +35,20 @@ class ProfileImage:
         for _ in range(self.height):
             self.image.append([0] * self.width)
 
-
     @classmethod
     def from_base64_string(cls, base64_string):
-        image_bytes = base64.b64decode(base64_string.encode('utf-8'))
+        image_bytes = base64.b64decode(base64_string.encode("utf-8"))
         return cls.from_bytes(image_bytes)
 
     def to_base64_string(self):
         return base64.b64encode(bytes(self)).decode("utf-8")
-
 
     @classmethod
     def from_bytes(cls, image_bytes):
         flat_image = []
         for i in image_bytes:
             flat_image.append(i >> 4)  # First nybble
-            flat_image.append(i & 2**4-1)  # Last nybble
+            flat_image.append(i & 2 ** 4 - 1)  # Last nybble
         image = cls()
         image.image = [flat_image[i : i + 16] for i in range(0, 256, 16)]
         return image
@@ -58,9 +57,8 @@ class ProfileImage:
         flat_image = sum(self.image, [])  # flatten the image into a 1-dimensional list
         image_bytearray = bytearray()
         for i in range(0, len(flat_image), 2):
-            image_bytearray.append((flat_image[i] << 4) + flat_image[i+1])
+            image_bytearray.append((flat_image[i] << 4) + flat_image[i + 1])
         return bytes(image_bytearray)
-
 
     @classmethod
     def from_int(cls, image_int):
@@ -116,7 +114,7 @@ class ProfileImage:
         mask_image = Image.open(mask_image_file_path).convert("RGBA")
 
         # Change high alpha pixels to black, in case the mask is via the alpha channel
-        # If the alpha value of a pixel renders it to be more than half transparent, 
+        # If the alpha value of a pixel renders it to be more than half transparent,
         # make that pixel black. This ensures that an image using an alpha mask can
         # now be used as a value mask (monochrome).
         black = (0, 0, 0, 255)

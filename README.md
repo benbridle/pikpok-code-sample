@@ -6,7 +6,7 @@ Note: a live demo of this code sample can be accessed by visiting http://doctrin
 
 This code sample contains the current Web API and account management website for an MMO game called Doctrine that is in early development. In Doctrine, players will construct and pilot remotely-controlled vehicles in order to explore a post-apocalyptic Earth, scavenge for resources, work together to construct sprawling bases, and fight back against the relentless expansion of a rampant artificial intelligence.
 
-The code sample includes a Web API written using Python with Flask and SQLAlchemy, an SQL database using MySQL, and a web app using HTML, CSS, and Javascript.  
+The code sample includes a Web API written using Python with Flask and SQLAlchemy, an SQL database using MySQL, a web app using HTML, CSS, and Javascript, and tests written with pytest.
 
 ## Setup
 ### Installing system dependencies

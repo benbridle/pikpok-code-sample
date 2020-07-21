@@ -172,8 +172,8 @@ class PaintController {
         return this.colour_palette.selected_colour;
     }
 
+    // Rerender the canvas when the mouse leaves, to remove hover indicators
     mouseout(event) {
-        // Removes last highlight when mouse leaves canvas
         this.profile_image.render();
     }
 
@@ -188,6 +188,7 @@ class PaintController {
         this.onhover(event);
     }
 
+    // When right-clicking profile image canvas, set the palette colour to the one beneath the mouse
     onauxclick(event) {
         var coords = this.profile_image.event_to_pixels(event);
         var clicked_colour = this.profile_image.get_pixel_colour(coords);
@@ -198,6 +199,7 @@ class PaintController {
     onhover(event) {
         var coords = this.profile_image.event_to_pixels(event);
         this.profile_image.render();
+        // Allow dragging the mouse to paint a line
         if (event.buttons == 1) {
             this.paint_pixel(coords, this.get_paint_colour());
         }
@@ -216,15 +218,18 @@ class ColourPalette extends ProfileImage {
         this.canvas.addEventListener('click', this.onclick.bind(this), false)
     }
 
+    // Select which palette colour to paint with
     set_colour(colour_index) {
         this.selected_colour = colour_index;
         this.render();
     }
 
+    // Rerender the canvas when the mouse leaves, to remove hover indicators
     mouseout() {
         this.render();
     }
 
+    // Convert a colour index to image pixel coordinates
     index_to_coords(index) {
         var y = 0;
         if (index >= 8) {
@@ -240,6 +245,7 @@ class ColourPalette extends ProfileImage {
         this.mark_pixel_with_colour(this.index_to_coords(this.selected_colour), colour);
     }
 
+    // Draw an outline around the palette colour currently under the mouse
     onhover(event) {
         var coords = this.event_to_pixels(event);
         this.render();

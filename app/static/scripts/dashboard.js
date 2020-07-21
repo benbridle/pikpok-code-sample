@@ -9,7 +9,8 @@ function get_account_information_callback(response) {
     var date_options = { year: 'numeric', month: 'long', day: 'numeric' };
     document.getElementById("account-created-on").innerHTML = created_on.toLocaleDateString(undefined, date_options);
     document.getElementById("account-is-developer").innerHTML = response.response.is_developer;
-    // Add a profile card for each profile associated with the account
+
+    // Create a profile card for each profile associated with the account
     response.response.profiles.forEach(profile => {
         add_profile_card(profile.name, profile.entity.wallet.value, profile.picture);
     });
@@ -19,13 +20,19 @@ function get_account_information_callback(response) {
 
 function add_profile_card(name, money, picture) {
     var card_template = document.getElementById("toolbox").getElementsByClassName("profile-card")[0];
-    var reference_card = document.getElementById("create-profile");
     var new_card = card_template.cloneNode(true);
+
+    // Set information values on new card
     new_card.getElementsByTagName("h1")[0].innerHTML = name;
     new_card.getElementsByTagName("h2")[0].innerHTML = "$" + money.toFixed(2);
+
+    // Set profile picture on new card
     var canvas = new_card.getElementsByTagName("canvas")[0];
     initialise_profile_image(canvas);
     canvas.profile_image.from_base64(picture);
+
+    // Add new card to profile card container
+    var reference_card = document.getElementById("create-profile");
     document.getElementById("profile-container").insertBefore(new_card, reference_card);
 }
 
@@ -59,6 +66,7 @@ function hide_create_profile_modal() {
 
 
 function create_profile(name, picture) {
+    // Create a new profile on the server
     body_data = {
         "account_id": get_account_id(),
         "name": name,

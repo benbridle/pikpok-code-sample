@@ -4,11 +4,10 @@ body {
     /* Set some sane defaults */
     margin: 0px;
     padding: 0px;
-    font-family: 'Karla', sans-serif;
+    color: black;
     font-family: 'Heebo', sans-serif;
     font-weight: 400;
     box-sizing: border-box;
-    color: black;
 }
 
 img {
@@ -26,7 +25,7 @@ h3 {
 }
 
 .vertical-center {
-    /* Center any element vertically */
+    /* Center an element vertically */
     position: absolute;
     top: 50%;
     left: 50%;
@@ -35,6 +34,7 @@ h3 {
 }
 
 .nudge-up {
+    /* For use in conjunction with .vertical-center */
     top: 45%;
 }
 
@@ -46,13 +46,13 @@ h3 {
 }
 
 .main-title {
-    /* DOCTRINE title on main page */
+    /* Used for DOCTRINE title on main page */
     font-size: 4em;
     text-align: center;
 }
 
 .subtitle {
-    /* Subtitle on main page */
+    /* Used for subtitle on main page */
     font-size: 1em;
     text-align: center;
     letter-spacing: 5px;
@@ -237,6 +237,7 @@ div.profile-card-create:hover {
 }
 
 canvas.profile-image {
+    /* Default background colour before initialisation */
     background-color: navy;
     margin: 20px;
     border: 3px solid #333;
@@ -271,6 +272,7 @@ table.keyvalue td:last-child {
 }
 
 .cover-page {
+    /* Completely cover the page */
     width: 100%;
     padding-top: 100%;
     position: absolute;

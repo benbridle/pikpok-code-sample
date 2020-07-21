@@ -2,10 +2,10 @@
                         README for the icons/ directory
                         -------------------------------
 
-   All images in this directory are derived from the Material Design Icon
-   Set by Google (https://github.com/google/material-design-icons), which
-   are included in this project under the terms of the Apache 2.0 License.
-   The full text of the license is included below.
+   All images in the /icons directory are derived from the Material Design Icon
+   Set by Google (https://github.com/google/material-design-icons), which are
+   included in this project under the terms of the Apache 2.0 License. The
+   full text of the license is included below.
 
 
   ---------------------------------------------------------------------------

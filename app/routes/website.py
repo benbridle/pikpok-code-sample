@@ -17,6 +17,7 @@ def login():
 def create_account():
     return render_template("create_account.html")
 
+
 @website.route("/dashboard")
 def dashboard():
     return render_template("dashboard.html")

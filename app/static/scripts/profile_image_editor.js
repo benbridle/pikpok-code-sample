@@ -77,9 +77,6 @@ class ProfileImage {
     outline_pixel(coords, colour_index = 12, thickness = 1) {
         var ctx = this.canvas.getContext("2d");
 
-        // Disable anti-aliasing
-        // ctx.translate(0.5, 0.5);
-
         ctx.lineWidth = thickness;
         ctx.strokeStyle = palette[colour_index];
         ctx.strokeRect(
@@ -88,9 +85,6 @@ class ProfileImage {
             this.pixel_size - thickness,
             this.pixel_size - thickness,
         );
-
-        // Re-enable anti-aliasing
-        // ctx.translate(-0.5, -0.5);
     }
 
     // Shows a small square of the chosen colour on the pixel beneath the mouse
@@ -256,7 +250,6 @@ class ColourPalette extends ProfileImage {
         var coords = this.event_to_pixels(event);
         this.selected_colour = this.get_pixel_colour(coords);
         this.render();
-        // this.highlight_pixel(coords);
     }
 
     draw_palette(palette) {
@@ -269,21 +262,7 @@ class ColourPalette extends ProfileImage {
     }
 }
 
-// Internet explorer icon
-
-// var b64_string = "zMzMzMzGZmzMzMx3ZmbMxszMdmZmVWzGzMdtVmVVVsbMemxmd2zFbMymJmbMdsxsx/h2bMzHxVbNx2ZmZlVVVtwXZmZmZmZm0Wd2bMzMzMyvd3ZszMdmZqZ3d2bMdmZmp853dmZmZmzXzOd3ZmZmzMdsyud3ZszMzHd8zMzMzMw="
-
-// var image_canvas = document.getElementById("paint-canvas");
-// var palette_canvas = document.getElementById("paint-palette");
-// var b64_element = document.getElementById("hex-field");
-
-// var profile_image = new ProfileImage(16, 16, 32, image_canvas, default_colour = 12);
-// profile_image.from_base64(b64_string);
-// var colour_palette = new ColourPalette(8, 2, 64, palette_canvas, default_colour = 0);
-// var paint_controller = new PaintController(profile_image, colour_palette, b64_element);
-
-// profile_image.render();
-
+// Initialise the colour palette, and connect it to the profile image editor
 function initialise_palette() {
     var palette_canvas = document.getElementById("palette");
     var new_profile_image = document.getElementById("new-profile-image");

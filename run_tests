@@ -12,7 +12,9 @@ pytest "${@}"
 # Shut down the Flask server
 # (killing the most recent background job via 'kill %1' doesn't work here)
 # Find the process ID of the running 'start_server' script
-# (killing this process doesn't kill the underlying server process)
+# (killing this process doesn't kill the underlying server process, so we need
+#  to find the PID of the python3 instance that was launched by the script)
 START_SERVER_PID=$(ps --no-header -C start_server | awk '{print $1}')
-# Kill the python3 instance that was launched by the 'start_server' script
-kill $(ps --no-header --ppid $START_SERVER_PID | awk '{print $1}')
+PYTHON_PID=$(ps --no-header --ppid $START_SERVER_PID | awk '{print $1}')
+# Killing the python process also stops all of the child gunicorn instances
+kill $PYTHON_PID

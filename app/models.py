@@ -7,6 +7,7 @@ from sqlalchemy.dialects.mysql import INTEGER, BINARY, DECIMAL, FLOAT
 from app import db
 from app.modules.profile_image import ProfileImage
 
+# Alias database types so that this module can be used by plain SQLAlchemy as well as Flask-SQLAlchemy
 Column = db.Column
 Integer = db.Integer
 String = db.String
@@ -16,10 +17,12 @@ DateTime = db.DateTime
 Boolean = db.Boolean
 Interval = db.Interval
 relationship = db.relationship
+
+# Alias unsigned types for convenience
 UnsignedInt = INTEGER(unsigned=True)
 UnsignedFloat = FLOAT(unsigned=True)
 
-
+# Alias decimal types to make the argument format more convenient
 def Decimal(integer_places, decimal_places, **kwargs):
     return DECIMAL(precision=(integer_places + decimal_places), scale=decimal_places, **kwargs)
 
@@ -265,7 +268,7 @@ class Dome(db.Model):
 
 
 class DomeConnection(db.Model):
-    """A tunnel connecting two biodomes to each other."""
+    """A tunnel connecting two biodomes to one another."""
 
     __tablename__ = "dome_connection"
 
@@ -311,9 +314,6 @@ class Wallet(db.Model):
 
     def __repr__(self):
         return f"<Wallet #{self.id}>"
-
-
-# Logging tables
 
 
 class TransactionEvent:

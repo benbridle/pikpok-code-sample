@@ -1,4 +1,4 @@
-# Wheel needs to be installed first so that mysqlclient installs correctly
+# Wheel needs to be manually installed first so that mysqlclient installs correctly
 wheel
 
 flask

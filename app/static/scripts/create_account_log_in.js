@@ -80,3 +80,14 @@ function reset_error_state() {
     try { document.getElementById("confirm-password").classList.remove("error"); } catch (e) {}
     document.getElementById("error-message").classList.add("hidden");
 }
+
+// Add letter spacing when entering a password. This is done because spacing
+// looks good applied to password dots, but looks bad applied to hint text.
+function passwordUpdate(event) {
+    reset_error_state();
+    if (event.target.value.length == 0) {
+        event.target.style.letterSpacing = "0px";
+    } else {
+        event.target.style.letterSpacing = "3px";
+    }
+}

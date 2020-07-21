@@ -54,13 +54,15 @@
         <div id="create-profile-modal" class="card gone">
             <h1>CREATE NEW PROFILE</h1>
             <form id="create-profile-form">
-                <canvas id="new-profile-image" class="profile-image" width="176px" height="176px"></canvas>
+                <canvas id="profile-image-editor" class="profile-image" width="176px" height="176px"></canvas>
                 <br>
                 <canvas id="palette" class="profile-image" width="176px" height="44px" style="margin-top: -10px;"></canvas>
-                <input id="profile-name" type="text" placeholder="Profile name" style="max-width: 400px;" maxlength="32" size="1"></input>
+                <p class="error hidden" id="error-message">Error message</p>
+                <input id="profile-name" type="text" placeholder="Profile name" style="max-width: 400px;" maxlength="32" size="1" required></input>
                 <div class="horizontal-center">
-                    <button type="submit">CREATE PROFILE</button>
-                    <button class="danger" onclick="hide_create_profile_modal()">CANCEL</button>
+                    <button id="create-profile-submit" type="submit">CREATE PROFILE</button>
+                    <p id="loader" class="loader gone">LOADING...</p>
+                    <button id="create-profile-cancel" type="button" class="danger" onclick="hide_create_profile_modal()">CANCEL</button>
                 </div>
             </form>
         </div>
@@ -76,15 +78,50 @@
     </div>
 
     <script>
-        get_account_information();
+        const create_profile_submit_button = document.getElementById("create-profile-submit");
+        const create_profile_cancel_button = document.getElementById("create-profile-cancel");
+        const profile_name_input = document.getElementById("profile-name");
+        const error_message_element = document.getElementById("error-message");
 
-        var form = document.getElementById("create-profile-form");
+        // Populate dashboard with account information on page load
+        get_account_information();
+        // Initialise the profile image editor and palette on page load
+        initialise_profile_image(document.getElementById("profile-image-editor"));
+        initialise_palette();
+
+        // Remove error message and red input backgrounds when the user starts typing again
+        profile_name_input.addEventListener('input', reset_error_state);
+
+        // Attempt to create a new profile when the form is submitted
+        const form = document.getElementById("create-profile-form");
         form.addEventListener('submit', function(event) {
-            var name = document.getElementById("profile-name").value;
-            var profile_image = document.getElementById("new-profile-image").profile_image.to_base64();
+            var name = profile_name_input.value;
+            var profile_image = document.getElementById("profile-image-editor").profile_image.to_base64();
             create_profile(name, profile_image);
             event.preventDefault();
         });
+
+        function show_loader() {
+            document.getElementById("loader").classList.remove("gone");
+            create_profile_submit_button.classList.add("gone");
+            create_profile_cancel_button.classList.add("gone");
+        }
+
+        function hide_loader() {
+            document.getElementById("loader").classList.add("gone");
+            create_profile_submit_button.classList.remove("gone");
+            create_profile_cancel_button.classList.remove("gone");
+        }
+
+        function set_error_message(message) {
+            error_message_element.classList.remove("hidden");
+            error_message_element.innerHTML = message;
+        }
+
+        function reset_error_state() {
+            profile_name_input.classList.remove("error");
+            error_message_element.classList.add("hidden");
+        }
     </script>
 
 

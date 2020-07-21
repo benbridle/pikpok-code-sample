@@ -44,11 +44,12 @@
     </div>
 
     <script>
-        var form = document.getElementById("create-account-form");
+        const email = document.getElementById("email");
+        const password = document.getElementById("password");
+        const confirm_password = document.getElementById("confirm-password");
+
+        const form = document.getElementById("create-account-form");
         form.addEventListener('submit', function(event) {
-            var email = document.getElementById("email");
-            var password = document.getElementById("password");
-            var confirm_password = document.getElementById("confirm-password");
             if (password.value == confirm_password.value) {
                 create_account(email.value, password.value);
             } else {
@@ -58,24 +59,11 @@
             }
             event.preventDefault();
         });
-    </script>
 
-    <script>
-        const password = document.getElementById("password");
-        const confirm_password = document.getElementById("confirm-password");
+        email.addEventListener('input', reset_error_state);
+
         password.addEventListener('input', passwordUpdate);
         confirm_password.addEventListener('input', passwordUpdate);
-
-        window.onhashchange = reset_error_state;
-
-        function passwordUpdate(event) {
-            reset_error_state();
-            if (event.target.value.length == 0) {
-                event.target.style.letterSpacing = "0px";
-            } else {
-                event.target.style.letterSpacing = "3px";
-            }
-        }
     </script>
 
 

@@ -37,34 +37,16 @@
     </div>
 
     <script>
-        var form = document.getElementById("log-in-form");
-        form.addEventListener('submit', function(event) {
-            var email = document.getElementById("email").value;
-            var password = document.getElementById("password").value;
-            log_in(email, password);
-            event.preventDefault();
-        });
-    </script>
-
-    <script>
         const email = document.getElementById("email");
         const password = document.getElementById("password");
-        email.addEventListener('input', emailUpdate);
+
+        const form = document.getElementById("log-in-form");
+        form.addEventListener('submit', function(event) {
+            log_in(email.value, password.value);
+            event.preventDefault();
+        });
+
+        email.addEventListener('input', reset_error_state);
         password.addEventListener('input', passwordUpdate);
-
-        window.onhashchange = reset_error_state;
-
-        function emailUpdate(event) {
-            reset_error_state();
-        }
-
-        function passwordUpdate(event) {
-            reset_error_state();
-            if (event.target.value.length == 0) {
-                event.target.style.letterSpacing = "0px";
-            } else {
-                event.target.style.letterSpacing = "3px";
-            }
-        }
     </script>
 </body>

@@ -40,6 +40,7 @@ class ProfileImage {
         for (var i = 0; i < this.height; i++) {
             this.image[i] = Array(this.width).fill(colour_index);
         }
+        this.render();
     }
 
     from_base64(base64_string) {
@@ -271,7 +272,7 @@ class ColourPalette extends ProfileImage {
 // Initialise the colour palette, and connect it to the profile image editor
 function initialise_palette() {
     var palette_canvas = document.getElementById("palette");
-    var new_profile_image = document.getElementById("new-profile-image");
+    var new_profile_image = document.getElementById("profile-image-editor");
 
     palette_canvas.palette = new ColourPalette(palette_canvas, 8, 2, new_profile_image);
     paint_controller = new PaintController(new_profile_image.profile_image, palette_canvas.palette)

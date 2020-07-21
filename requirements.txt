@@ -1,19 +1,19 @@
 # Wheel needs to be manually installed first so that mysqlclient installs correctly
 wheel
 
-flask
-python-dotenv
-mysqlclient
-gunicorn
-flask-sqlalchemy
-murmurhash3
-bcrypt
-simplejson
-pillow
+flask==1.1.2
+python-dotenv==0.14.0
+mysqlclient==2.0.1
+gunicorn==20.0.4
+flask-sqlalchemy==2.4.4
+murmurhash3==2.3.5
+bcrypt==3.1.7
+simplejson==3.17.2
+pillow==7.2.0
 
 # Packages for testing
-pytest
-requests
+pytest==5.4.3
+requests==2.24.0
 
 # Development packages for VS Code
 black

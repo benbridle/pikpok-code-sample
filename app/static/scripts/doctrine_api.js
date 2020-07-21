@@ -38,8 +38,8 @@ function get_account_id() {
     return Number(localStorage.getItem("account_id"));
 }
 
-function log_out() {
+function log_out(redirect_to = "/") {
     localStorage.removeItem("access_token");
     localStorage.removeItem("account_id");
-    window.location.replace("/");
+    window.location.replace(redirect_to);
 }

@@ -228,6 +228,8 @@ div.profile-card-create:hover {
 .profile-card h1 {
     font-size: 1.2em;
     font-family: 'IBM Plex Mono', monospace;
+    max-width: 100%;
+    overflow: auto;
 }
 
 .profile-card h2 {

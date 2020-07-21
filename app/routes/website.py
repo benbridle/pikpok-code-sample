@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template
-import random
 
 website = Blueprint("website", __name__)
 

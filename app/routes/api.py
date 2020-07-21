@@ -1,6 +1,6 @@
 import sqlalchemy
 import mmh3
-from datetime import datetime, timedelta
+from datetime import timedelta
 from flask import jsonify, request, Blueprint
 from app import db
 from app.models import *

@@ -9,7 +9,7 @@ flask-sqlalchemy==2.4.4
 murmurhash3==2.3.5
 bcrypt==3.1.7
 simplejson==3.17.2
-pillow==7.2.0
+pillow==9.0.0
 
 # Packages for testing
 pytest==5.4.3

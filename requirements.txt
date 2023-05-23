@@ -13,7 +13,7 @@ pillow==7.2.0
 
 # Packages for testing
 pytest==5.4.3
-requests==2.24.0
+requests==2.31.0
 
 # Development packages for VS Code
 black
